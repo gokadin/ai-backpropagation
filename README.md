@@ -20,7 +20,7 @@ Backpropagation is a technique used to teach a neural network that has at least 
 
 A perceptron is the same as our artificial neuron from part 1 of this series, expect that it has an activation threshold. 
 
-![](readme-images\perceptron.jpg)
+![perceptron](readme-images/perceptron.jpg)
 
 #### Activation functions
 
