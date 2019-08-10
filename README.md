@@ -11,6 +11,8 @@ Backpropagation is a technique used to teach a neural network that has at least 
 
 - [Theory](#theory)  
   - [Introducing the perceptron](#introducing-the-perceptron)
+  - [Backpropagation](#backpropagation)
+    - [The forward pass](#the-forward-pass)
 - [Code example](#code-example)
 - [References](#references)
 
@@ -37,6 +39,16 @@ If <img src="/tex/22a1bca1370e6ec943222dc2ea608065.svg?invert_in_darkmode&saniti
 - tanh
 
 <p align="center"><img src="/tex/4660ad0287e8a2fe5ffefc23983877df.svg?invert_in_darkmode&sanitize=true" align=middle width=86.7257853pt height=16.438356pt/></p>
+
+### Backpropagation
+
+The backpropagation algorith is used to train artificial neural networks, more specifically those with more than two layers. 
+
+It's using a forward pass to compute the outputs of the network, calculates the error and then goes backwards towards the input layer to update each weight based on the error gradient. 
+
+#### The forward pass
+
+...
 
 ## Code example
 
