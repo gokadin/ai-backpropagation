@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gokadin/ann-core/layer"
+	"math"
 	"math/rand"
 	"time"
 )
@@ -15,24 +17,23 @@ func main() {
 
 	inputs := buildInputs()
 	expectedOutputs := buildExpectedOutputs()
-	_ = expectedOutputs
 
 	learn(network, inputs, expectedOutputs)
 }
 
-func buildNetwork() *network {
-	inputLayer := layer.NewLayer(2, layer.Identity)
-	hiddenLayer := layer.NewLayer(2, layer.Sigmoid)
-	outputLayer := layer.NewLayer(1, layer.Identity)
+func buildNetwork() *layerCollection {
+	inputLayer := layer.NewLayer(2, layer.FunctionIdentity)
+	hiddenLayer := layer.NewLayer(2, layer.FunctionSigmoid)
+	outputLayer := layer.NewLayer(1, layer.FunctionIdentity)
 	inputLayer.ConnectTo(hiddenLayer)
 	hiddenLayer.ConnectTo(outputLayer)
 
-	network := newNetwork()
+	network := newLayerCollection()
 	network.layers = append(network.layers, inputLayer)
 	network.layers = append(network.layers, hiddenLayer)
 	network.layers = append(network.layers, outputLayer)
 
-    return network
+	return network
 }
 
 func buildInputs() [][]float64 {
@@ -57,34 +58,89 @@ func buildExpectedOutputs() [][]float64 {
 	return outputs
 }
 
-func learn(network *network, inputs [][]float64, expectedOutputs [][]float64) {
+func learn(network *layerCollection, inputs [][]float64, expectedOutputs [][]float64) {
 	learn := true
 	for learn {
 		for inputIndex, input := range inputs {
 			forwardPass(network, input)
-            backpropagate(network, expectedOutputs[inputIndex])
+			backpropagate(network, expectedOutputs[inputIndex])
 		}
+
+		err := calculateError(network.outputLayer())
+		fmt.Println("error:", err)
+		if err < 0.01 {
+			learn = false
+			fmt.Println("Network finished learning.")
+		}
+
+		// 4. update weights
+		updateWeights(network)
 	}
 }
 
-func forwardPass(network *network, input []float64) {
+func forwardPass(network *layerCollection, input []float64) {
 	network.inputLayer().ResetValues()
 	network.inputLayer().SetValues(input)
 	network.inputLayer().Activate()
 }
 
-func backpropagate(network *network, expectedOutput []float64) {
-	// set delta on output layer
+func backpropagate(network *layerCollection, expectedOutput []float64) {
+	// 1. accumulate deltas on output layer
+	accumulateOutputDeltas(network.outputLayer(), expectedOutput)
 
-	for nodeIndex, outputNode := range network.outputLayer().Nodes() {
-        delta := outputNode.Value() - expectedOutput[nodeIndex]
-        outputNode.AddDelta(delta)
+	// 2. accumulate deltas on hidden layers
+	accumulateHiddenDeltas(network)
+
+	// 3. accumulate gradients
+	accumulateGradients(network)
+}
+
+func accumulateOutputDeltas(outputLayer *layer.Layer, expectedOutput []float64) {
+	for nodeIndex, outputNode := range outputLayer.Nodes() {
+		outputNode.AddDelta(outputNode.Value() - expectedOutput[nodeIndex])
 	}
+}
 
-	// set delta on hidden layers
-
+func accumulateHiddenDeltas(network *layerCollection) {
 	// going backwards from the last hidden layer to the first hidden layer
 	for i := len(network.layers) - 2; i > 0; i-- {
-        previousLayer := network.layers[i + 1]
+		for _, node := range network.layers[i].Nodes() {
+			sumPreviousDeltasAndWeights := 0.0
+			for _, connection := range node.Connections() {
+				sumPreviousDeltasAndWeights += connection.NextNode().Delta() * connection.Weight()
+			}
+			node.AddDelta(sumPreviousDeltasAndWeights * network.layers[i].ActivationDerivative()(node.Value()))
+		}
 	}
+}
+
+func accumulateGradients(network *layerCollection) {
+	// going backwards from the last hidden layer to the input layer
+	for i := len(network.layers) - 2; i >= 0; i-- {
+		for _, node := range network.layers[i].Nodes() {
+			for _, connection := range node.Connections() {
+				connection.AddGradient(connection.NextNode().Delta() * node.Value())
+			}
+		}
+	}
+}
+
+func updateWeights(network *layerCollection) {
+	for i := 0; i < len(network.layers)-1; i++ {
+		for _, node := range network.layers[i].Nodes() {
+			for _, connection := range node.Connections() {
+				connection.UpdateWeight(learningRate)
+				connection.ResetGradient()
+			}
+			node.ResetDelta()
+		}
+	}
+}
+
+func calculateError(outputLayer *layer.Layer) float64 {
+	err := 0.0
+	for _, node := range outputLayer.Nodes() {
+		err += math.Pow(node.Delta(), 2)
+	}
+	return err / 2
 }
