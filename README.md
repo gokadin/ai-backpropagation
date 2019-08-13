@@ -77,11 +77,9 @@ In the same manner, the input to the output layer perceptrons are
 
 <p align="center"><img src="/tex/089ae982e01cf7066a17c61d442e4e09.svg?invert_in_darkmode&sanitize=true" align=middle width=115.5414876pt height=50.04352485pt/></p>
 
-and their output is
+and their output is the same since we assigned them the identity activation function. 
 
 <p align="center"><img src="/tex/ed55f30fd57b7f81e3eb501fd93a0426.svg?invert_in_darkmode&sanitize=true" align=middle width=137.97585285pt height=16.438356pt/></p>
-
-since the activation function is the identity function in this case. 
 
 Once the inputs have been propagated through the network, we can calculate the error:
 
