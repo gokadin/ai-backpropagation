@@ -77,11 +77,9 @@ In the same manner, the input to the output layer perceptrons are
 
 $$ u_{kt} = \sum^{J}_{j = 1} w_{jk}z_{jt} $$
 
-and their output is
+and their output is the same since we assigned them the identity activation function. 
 
 $$ y_{kt} = f_k(u_{kt}) = u_{kt} $$
-
-since the activation function is the identity function in this case. 
 
 Once the inputs have been propagated through the network, we can calculate the error:
 
