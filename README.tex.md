@@ -55,7 +55,7 @@ It's using a forward pass to compute the outputs of the network, calculates the 
 
 $t$ being the current association out of $T$ associations. 
 
-We will assign the following activation functions to each layer:
+We will assign the following activation functions to each layer perceptrons:
 
 - input layer -> identity function
 - hidden layer -> sigmoid function
@@ -87,7 +87,33 @@ $$ E = \sum^{T}_{t = 1} E_t = \frac{1}{2} \sum^{T}_{t = 1} (y_{kt} - y\prime_{kt
 
 #### The backward pass
 
-...
+Now that we have the error, we can use it to update each weight of the network by going backwards layer by layer. 
+
+We know from *part 1* that the change of a weight is the negative of that weight's component in the error gradient times the learning rate. For a weight between the last hidden layer and the output layer, we then have
+
+$$ \Delta w_{jkt} = -\epsilon \frac{\partial E_t}{\partial w_{jk}} $$
+
+We can find the error gradient by using the chain rule
+
+$$ \frac{\partial E_t}{\partial w_{jk}} = \frac{\partial E_t}{\partial u_{kt}} \frac{\partial u_{kt}}{\partial w_{jk}} = \delta_{kt} z_{jt} \quad $$ where $$ \quad \delta_{kt} = y_{kt} - y\prime_{kt} $$
+
+Similarily, for a weight between hidden layers, in our case between the input layer and our first hidden layer, we have
+
+$$ \Delta w_{ijt} = -\epsilon \frac{\partial E_t}{\partial w_{ij}} $$
+
+$$ \frac{\partial E_t}{\partial w_{ij}} = \frac{\partial E_t}{\partial u_{jt}} \frac{\partial u_{jt}}{\partial w_{ij}} = \delta_{jt} x_{it} \quad $$ where $$ \quad \delta_{jt} = z_{jt} (1 - z_{jt}) \sum^K_{k = 1} \delta_{kt} w_{jk} $$
+
+Here the calculations are *slightly* more complex. Let's analyse the delta term $\delta_{jt}$ and understand how we got there. We start by calculating the partial derivative of $u_{jt}$ in respect to the error by using the chain rule
+
+$$ \frac{\partial E_t}{\partial u_{jt}} = \frac{\partial E_t}{\partial z_{jt}} \frac{d z_{jt}}{du_{jt}} $$
+
+$$ \frac{\partial E_t}{\partial z_{jt}} = \sum^K_{k = 1} \frac{\partial E_t}{\partial u_{kt}} \frac{\partial u_{kt}}{\partial z_{jt}} = \sum^K_{k = 1} \delta_{kt} w_{jk} \quad $$ and $$ \quad \frac{d z_{jt}}{du_{jt}} = f'(z_{jt}) = z_{jt}(1 - z{jt}) $$
+
+Remember that our activation function $f$ is the sigmoid function and that its derivative is $f(x)(1 - f(x))$
+
+The change of a weight for $T$ associations is the accumulation of each association
+
+$$ \Delta w_{ij} = -\epsilon \sum^T_{t = 1} \delta_{jt} x_{it} $$
 
 ### Algorithm summary
 
@@ -101,3 +127,4 @@ under construction...
 
 - Artificial intelligence engines by James V Stone (2019)
 - http://neuralnetworksanddeeplearning.com/chap2.html
+- https://google-developers.appspot.com/machine-learning/crash-course/backprop-scroll/
