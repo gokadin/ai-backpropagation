@@ -95,19 +95,19 @@ $$ \Delta w_{jkt} = -\epsilon \frac{\partial E_t}{\partial w_{jk}} $$
 
 We can find the error gradient by using the chain rule
 
-$$ \frac{\partial E_t}{\partial w_{jk}} = \frac{\partial E_t}{\partial u_{kt}} \frac{\partial u_{kt}}{\partial w_{jk}} = \delta_{kt} z_{jt} \quad $$ where $$ \quad \delta_{kt} = y_{kt} - y\prime_{kt} $$
+$$ \frac{\partial E_t}{\partial w_{jk}} = \frac{\partial E_t}{\partial u_{kt}} \frac{\partial u_{kt}}{\partial w_{jk}} = \delta_{kt} z_{jt} \quad where \quad \delta_{kt} = y_{kt} - y\prime_{kt} $$
 
 Similarily, for a weight between hidden layers, in our case between the input layer and our first hidden layer, we have
 
 $$ \Delta w_{ijt} = -\epsilon \frac{\partial E_t}{\partial w_{ij}} $$
 
-$$ \frac{\partial E_t}{\partial w_{ij}} = \frac{\partial E_t}{\partial u_{jt}} \frac{\partial u_{jt}}{\partial w_{ij}} = \delta_{jt} x_{it} \quad $$ where $$ \quad \delta_{jt} = z_{jt} (1 - z_{jt}) \sum^K_{k = 1} \delta_{kt} w_{jk} $$
+$$ \frac{\partial E_t}{\partial w_{ij}} = \frac{\partial E_t}{\partial u_{jt}} \frac{\partial u_{jt}}{\partial w_{ij}} = \delta_{jt} x_{it} \quad where \quad \delta_{jt} = z_{jt} (1 - z_{jt}) \sum^K_{k = 1} \delta_{kt} w_{jk} $$
 
 Here the calculations are *slightly* more complex. Let's analyse the delta term $\delta_{jt}$ and understand how we got there. We start by calculating the partial derivative of $u_{jt}$ in respect to the error by using the chain rule
 
 $$ \frac{\partial E_t}{\partial u_{jt}} = \frac{\partial E_t}{\partial z_{jt}} \frac{d z_{jt}}{du_{jt}} $$
 
-$$ \frac{\partial E_t}{\partial z_{jt}} = \sum^K_{k = 1} \frac{\partial E_t}{\partial u_{kt}} \frac{\partial u_{kt}}{\partial z_{jt}} = \sum^K_{k = 1} \delta_{kt} w_{jk} \quad $$ and $$ \quad \frac{d z_{jt}}{du_{jt}} = f'(z_{jt}) = z_{jt}(1 - z{jt}) $$
+$$ \frac{\partial E_t}{\partial z_{jt}} = \sum^K_{k = 1} \frac{\partial E_t}{\partial u_{kt}} \frac{\partial u_{kt}}{\partial z_{jt}} = \sum^K_{k = 1} \delta_{kt} w_{jk} \quad and \quad \frac{d z_{jt}}{du_{jt}} = f'(z_{jt}) = z_{jt}(1 - z{jt}) $$
 
 Remember that our activation function $f$ is the sigmoid function and that its derivative is $f(x)(1 - f(x))$
 
