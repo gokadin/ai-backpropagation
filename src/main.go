@@ -26,7 +26,7 @@ func main() {
 func buildNetwork() *layerCollection {
 	inputLayer := layer.NewLayer(2, layer.FunctionIdentity)
 	hiddenLayer := layer.NewLayer(2, layer.FunctionSigmoid)
-	outputLayer := layer.NewLayer(1, layer.FunctionIdentity)
+	outputLayer := layer.NewOutputLayer(1, layer.FunctionIdentity)
 	inputLayer.ConnectTo(hiddenLayer)
 	hiddenLayer.ConnectTo(outputLayer)
 
