@@ -16,6 +16,7 @@ Backpropagation is a technique used to teach a neural network that has at least 
     - [The forward pass](#the-forward-pass)
     - [The backward pass](#the-backward-pass)
   - [Algorithm summary](#algorithm-summary)
+  - [Visualizing backpropagation](#visualizing-backpropagation)
 - [Code example](#code-example)
 - [References](#references)
 
@@ -97,13 +98,13 @@ We can find the error gradient by using the chain rule
 
 <p align="center"><img src="/tex/b96abf43fa8539cc9ea550f3860b16fa.svg?invert_in_darkmode&sanitize=true" align=middle width=383.52490109999997pt height=38.5152603pt/></p>
 
-Similarily, for a weight between hidden layers, in our case between the input layer and our first hidden layer, we have
+Similarly, for a weight between hidden layers, in our case between the input layer and our first hidden layer, we have
 
 <p align="center"><img src="/tex/6a7b90b9efb24cc2b6ecdfdadd20791b.svg?invert_in_darkmode&sanitize=true" align=middle width=118.34445975pt height=38.5152603pt/></p>
 
 <p align="center"><img src="/tex/26d8e54af9b9c5f2195681156b3cdddd.svg?invert_in_darkmode&sanitize=true" align=middle width=463.55822865pt height=48.18280005pt/></p>
 
-Here the calculations are *slightly* more complex. Let's analyse the delta term <img src="/tex/a3ec72e0f05115605b57d81cfab96e7d.svg?invert_in_darkmode&sanitize=true" align=middle width=18.37621829999999pt height=22.831056599999986pt/> and understand how we got there. We start by calculating the partial derivative of <img src="/tex/f8bbbfffa921d3289fa9fdb9a1cf47c4.svg?invert_in_darkmode&sanitize=true" align=middle width=20.48055239999999pt height=14.15524440000002pt/> in respect to the error by using the chain rule
+Here the calculations are *slightly* more complex. Let's analyze the delta term <img src="/tex/a3ec72e0f05115605b57d81cfab96e7d.svg?invert_in_darkmode&sanitize=true" align=middle width=18.37621829999999pt height=22.831056599999986pt/> and understand how we got there. We start by calculating the partial derivative of <img src="/tex/f8bbbfffa921d3289fa9fdb9a1cf47c4.svg?invert_in_darkmode&sanitize=true" align=middle width=20.48055239999999pt height=14.15524440000002pt/> in respect to the error by using the chain rule
 
 <p align="center"><img src="/tex/e4d98a206a2733836d784f9065398280.svg?invert_in_darkmode&sanitize=true" align=middle width=119.78647559999999pt height=38.5152603pt/></p>
 
@@ -117,11 +118,58 @@ The change of a weight for <img src="/tex/2f118ee06d05f3c2d98361d9c30e38ce.svg?i
 
 ### Algorithm summary
 
+- initialize network weights to a small random value
+- while error gradient is not ~<img src="/tex/29632a9bf827ce0200454dd32fc3be82.svg?invert_in_darkmode&sanitize=true" align=middle width=8.219209349999991pt height=21.18721440000001pt/> 
+  - for each association, propagate the network forward and get the outputs
+    - accumulate the $\delta$ term for each output layer node ($y_{kt} - y\prime_{kt}$)
+    - accumulate the gradient for each output weight ($\delta_{kt} z_{jt}$)
+    - accumulate the $\delta$ term for each hidden layer node ($z_{jt}(1 - z_{jt})\sum^K_{k = 1}\delta_{kt} w_{jt}$)
+    - accumulate the gradient for each hidden layer weight ($\delta_{jt} x_{it}$)
+  - update all weights and reset accumulated gradient and delta values (<img src="/tex/ee701a4682b8b020790a6e5d3183bd37.svg?invert_in_darkmode&sanitize=true" align=middle width=178.84515495pt height=32.256008400000006pt/>)
+
+### Visualizing backpropagation
+
+In this example, we'll use real numbers to follow each step of the network. We'll feed our 2x2x1 network with inputs <img src="/tex/e4f0b9bce59fcd6b7ace485069c84ced.svg?invert_in_darkmode&sanitize=true" align=middle width=58.44761669999998pt height=24.65753399999998pt/> and we will expect an output of <img src="/tex/51d89c4114d0201a214771c31c6bff9f.svg?invert_in_darkmode&sanitize=true" align=middle width=30.137091599999987pt height=24.65753399999998pt/>. To make matters simpler, we'll initialize all of our weights with the same value of <img src="/tex/cde2d598001a947a6afd044a43d15629.svg?invert_in_darkmode&sanitize=true" align=middle width=21.00464354999999pt height=21.18721440000001pt/>. However, keep in mind that normally weights are initialized using random numbers. 
+
+#### The forward pass
+
+We start by setting all of the nodes of the input layer with the input values; <img src="/tex/902d9d457b5dd887bab6109f2939c439.svg?invert_in_darkmode&sanitize=true" align=middle width=126.68932649999998pt height=21.18721440000001pt/>. 
+
+Since the input layer nodes have no activation function, then <img src="/tex/0a353c7c5dda5a3590dfdf659d666296.svg?invert_in_darkmode&sanitize=true" align=middle width=93.23991599999998pt height=21.18721440000001pt/>. 
+
+![backpropagation-visual](readme-images/backprop-visual-1.jpg)
+
+We then propagate the network forward by setting the <img src="/tex/8eb543f68dac24748e65e2e4c5fc968c.svg?invert_in_darkmode&sanitize=true" align=middle width=10.69635434999999pt height=22.465723500000017pt/> layer node inputs (<img src="/tex/4d8443b72a1de913b4a3995119296c90.svg?invert_in_darkmode&sanitize=true" align=middle width=15.499497749999989pt height=14.15524440000002pt/>) with the sum of all of the previous layer node outputs times their corresponding weights:
+
+<p align="center"><img src="/tex/b8b64f33f599e5f31d0d1ee4aa8d7fd2.svg?invert_in_darkmode&sanitize=true" align=middle width=302.93619674999997pt height=47.806078649999996pt/></p>
+
+![backpropagation-visual](readme-images/backprop-visual-2.jpg)
+
+![backpropagation-visual](readme-images/backprop-visual-3.jpg)
+
+We then activate the <img src="/tex/8eb543f68dac24748e65e2e4c5fc968c.svg?invert_in_darkmode&sanitize=true" align=middle width=10.69635434999999pt height=22.465723500000017pt/> layer nodes by passing it's inputs to the sigmoid function <img src="/tex/2bdf51d6b6da5953c65a2097ac846972.svg?invert_in_darkmode&sanitize=true" align=middle width=95.00189984999999pt height=27.77565449999998pt/>
+
+![backpropagation-visual](readme-images/backprop-visual-4.jpg)
+
+And we propagate those results to the final layer <img src="/tex/268ed1352dff47b71e61b3328c3edce3.svg?invert_in_darkmode&sanitize=true" align=middle width=266.79778949999996pt height=21.18721440000001pt/>
+
+Since we didn't assign an activation function to our output layer node, then <img src="/tex/e1f7e2cd426e2ece1aad8a07e24f10d7.svg?invert_in_darkmode&sanitize=true" align=middle width=114.9086301pt height=21.18721440000001pt/>
+
+![backpropagation-visual](readme-images/backprop-visual-5.jpg)
+
+#### The backward pass
+
 ...
 
 ## Code example
 
-under construction...
+The example teaches a 2x2x1 network the XOR operator. 
+
+<p align="center"><img src="/tex/45e155848e9c53acf0d057548b843990.svg?invert_in_darkmode&sanitize=true" align=middle width=383.295594pt height=39.452455349999994pt/></p>
+
+![code-example](readme-images/backpropagation-code-example.jpg)
+
+Where <img src="/tex/190083ef7a1625fbc75f243cffb9c96d.svg?invert_in_darkmode&sanitize=true" align=middle width=9.81741584999999pt height=22.831056599999986pt/> is the sigmoid function for the hidden layer nodes. 
 
 ## References
 
