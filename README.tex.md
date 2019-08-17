@@ -121,11 +121,11 @@ $$ \Delta w_{ij} = -\epsilon \sum^T_{t = 1} \delta_{jt} x_{it} $$
 - initialize network weights to a small random value
 - while error gradient is not ~$0$ 
   - for each association, propagate the network forward and get the outputs
-    - accumulate the $\delta$ term for each output layer node $\quad y_{kt} - y\prime_{kt}$
-    - accumulate the gradient for each output weight $\quad \delta_{kt} z_{jt}$
-    - accumulate the $\delta$ term for each hidden layer node $\quad z_{jt}(1 - z_{jt})\sum^K_{k = 1}\delta_{kt} w_{jt}$
-    - accumulate the gradient for each hidden layer weight $\quad \delta_{jt} x_{it}$
-  - update all weights and reset accumulated gradient and delta values $\quad w_{ij} = w_{ij} - \epsilon \sum^T_{t = 1}\delta_{jt} x_{it}$
+    - accumulate the $\delta$ term for each output layer node ($y_{kt} - y\prime_{kt}$)  
+    - accumulate the gradient for each output weight ($\delta_{kt} z_{jt}$)  
+    - accumulate the $\delta$ term for each hidden layer node ($z_{jt}(1 - z_{jt})\sum^K_{k = 1}\delta_{kt} w_{jt}$)  
+    - accumulate the gradient for each hidden layer weight ($\delta_{jt} x_{it}$) 
+  - update all weights and reset accumulated gradient and delta values ($w_{ij} = w_{ij} - \epsilon \sum^T_{t = 1}\delta_{jt} x_{it}$)
 
 ### Visualizing backpropagation
 
