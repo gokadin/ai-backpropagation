@@ -121,11 +121,11 @@ The change of a weight for <img src="/tex/2f118ee06d05f3c2d98361d9c30e38ce.svg?i
 - initialize network weights to a small random value
 - while error gradient is not ~<img src="/tex/29632a9bf827ce0200454dd32fc3be82.svg?invert_in_darkmode&sanitize=true" align=middle width=8.219209349999991pt height=21.18721440000001pt/> 
   - for each association, propagate the network forward and get the outputs
-    - accumulate the $\delta$ term for each output layer node $\quad y_{kt} - y\prime_{kt}$
-    - accumulate the gradient for each output weight $\quad \delta_{kt} z_{jt}$
-    - accumulate the $\delta$ term for each hidden layer node $\quad z_{jt}(1 - z_{jt})\sum^K_{k = 1}\delta_{kt} w_{jt}$
-    - accumulate the gradient for each hidden layer weight $\quad \delta_{jt} x_{it}$
-  - update all weights and reset accumulated gradient and delta values <img src="/tex/4f367686f4346276e9ea440dadb74362.svg?invert_in_darkmode&sanitize=true" align=middle width=178.84515495pt height=32.256008400000006pt/>
+    - accumulate the $\delta$ term for each output layer node ($y_{kt} - y\prime_{kt}$)  
+    - accumulate the gradient for each output weight ($\delta_{kt} z_{jt}$)  
+    - accumulate the $\delta$ term for each hidden layer node ($z_{jt}(1 - z_{jt})\sum^K_{k = 1}\delta_{kt} w_{jt}$)  
+    - accumulate the gradient for each hidden layer weight ($\delta_{jt} x_{it}$) 
+  - update all weights and reset accumulated gradient and delta values (<img src="/tex/ee701a4682b8b020790a6e5d3183bd37.svg?invert_in_darkmode&sanitize=true" align=middle width=178.84515495pt height=32.256008400000006pt/>)
 
 ### Visualizing backpropagation
 
