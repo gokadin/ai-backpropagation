@@ -17,6 +17,8 @@ Backpropagation is a technique used to teach a neural network that has at least 
     - [The backward pass](#the-backward-pass)
   - [Algorithm summary](#algorithm-summary)
   - [Visualizing backpropagation](#visualizing-backpropagation)
+    - [Forward pass](#forward-pass)
+    - [Backward pass](#backward-pass)
 - [Code example](#code-example)
 - [References](#references)
 
@@ -28,21 +30,15 @@ A perceptron is the same as our artificial neuron from part 1 of this series, ex
 
 ![perceptron](readme-images/perceptron.jpg)
 
-#### Activation functions
+#### Some activation functions
 
 If $u = \sum{\vec{x}\vec{w}}$ then typical activation functions are:
 
-- Sigmoid
+- Sigmoid $\quad y = \frac{1}{1 + e^{-u}}$
 
-$$ y = \frac{1}{1 + e^{-u}} $$
+- ReLU or rectified linear unit $\quad y = max(0, u)$
 
-- ReLU or rectified linear unit
-
-$$ y = max(0, u) $$
-
-- tanh
-
-$$ y = tanh(u) $$
+- tanh $\quad y = tanh(u)$
 
 ### Backpropagation
 
@@ -118,19 +114,22 @@ $$ \Delta w_{ij} = -\epsilon \sum^T_{t = 1} \delta_{jt} x_{it} $$
 
 ### Algorithm summary
 
-- initialize network weights to a small random value
+First, initialize network weights to a small random value. 
+
+Repeat the steps below until the error is about $0$
+
 - for each association, propagate the network forward and get the outputs
-  - calculate the $\delta$ term for each output layer node ($y_{kt} - y\prime_{kt}$)  
-  - accumulate the gradient for each output weight ($\delta_{kt} z_{jt}$)  
-  - calculate the $\delta$ term for each hidden layer node ($z_{jt}(1 - z_{jt})\sum^K_{k = 1}\delta_{kt} w_{jt}$)  
-  - accumulate the gradient for each hidden layer weight ($\delta_{jt} x_{it}$) 
+  - calculate the $\delta$ term for each output layer node ($y_{kt} - y\prime_{kt}$)
+  - accumulate the gradient for each output weight ($\delta_{kt} z_{jt}$)
+  - calculate the $\delta$ term for each hidden layer node ($z_{jt}(1 - z_{jt})\sum^K_{k = 1}\delta_{kt} w_{jt}$)
+  - accumulate the gradient for each hidden layer weight ($\delta_{jt} x_{it}$)
 - update all weights and reset accumulated gradients ($w_{ij} = w_{ij} - \epsilon \sum^T_{t = 1}\delta_{jt} x_{it}$)
 
 ### Visualizing backpropagation
 
-In this example, we'll use real numbers to follow each step of the network. We'll feed our 2x2x1 network with inputs $[1.0, 1.0]$ and we will expect an output of $[0.5]$. To make matters simpler, we'll initialize all of our weights with the same value of $0.5$. However, keep in mind that normally weights are initialized using random numbers. We will also design the network with a sigmoid activation function for the hidden layer and the identity function for the input and output layers. 
+In this example, we'll use actual numbers to follow each step of the network. We'll feed our 2x2x1 network with inputs $[1.0, 1.0]$ and we will expect an output of $[0.5]$. To make matters simpler, we'll initialize all of our weights with the same value of $0.5$. However, keep in mind that normally weights are initialized using random numbers. We will also design the network with a sigmoid activation function for the hidden layer and the identity function for the input and output layers. 
 
-#### The forward pass
+#### Forward pass
 
 We start by setting all of the nodes of the input layer with the input values; $x_1 = 1.0, x_2 = 1.0$. 
 
@@ -156,7 +155,7 @@ Since we didn't assign an activation function to our output layer node, then $y_
 
 ![backpropagation-visual](readme-images/backprop-visual-5.jpg)
 
-#### The backward pass
+#### Backward pass
 
 ...
 
