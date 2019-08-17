@@ -17,6 +17,8 @@ Backpropagation is a technique used to teach a neural network that has at least 
     - [The backward pass](#the-backward-pass)
   - [Algorithm summary](#algorithm-summary)
   - [Visualizing backpropagation](#visualizing-backpropagation)
+    - [Forward pass](#forward-pass)
+    - [Backward pass](#backward-pass)
 - [Code example](#code-example)
 - [References](#references)
 
@@ -28,21 +30,15 @@ A perceptron is the same as our artificial neuron from part 1 of this series, ex
 
 ![perceptron](readme-images/perceptron.jpg)
 
-#### Activation functions
+#### Some activation functions
 
 If <img src="/tex/22a1bca1370e6ec943222dc2ea608065.svg?invert_in_darkmode&sanitize=true" align=middle width=73.66339529999999pt height=24.657735299999988pt/> then typical activation functions are:
 
-- Sigmoid
+- Sigmoid <img src="/tex/d86b02d0ff42235bec29783460db8196.svg?invert_in_darkmode&sanitize=true" align=middle width=72.10045094999998pt height=27.77565449999998pt/>
 
-<p align="center"><img src="/tex/af4b64501b7d73bd2f2f5c56f5cac500.svg?invert_in_darkmode&sanitize=true" align=middle width=87.37202265pt height=34.3600389pt/></p>
+- ReLU or rectified linear unit <img src="/tex/e1ffed025adfa4b6f4c2d0b31b8a7148.svg?invert_in_darkmode&sanitize=true" align=middle width=100.80487889999998pt height=24.65753399999998pt/>
 
-- ReLU or rectified linear unit
-
-<p align="center"><img src="/tex/26fea42205a1ecb142c6ba3cb3ba73bf.svg?invert_in_darkmode&sanitize=true" align=middle width=100.80487889999999pt height=16.438356pt/></p>
-
-- tanh
-
-<p align="center"><img src="/tex/4660ad0287e8a2fe5ffefc23983877df.svg?invert_in_darkmode&sanitize=true" align=middle width=86.7257853pt height=16.438356pt/></p>
+- tanh <img src="/tex/4ad8e0d09581519fd366703474f136cb.svg?invert_in_darkmode&sanitize=true" align=middle width=86.72578694999999pt height=24.65753399999998pt/>
 
 ### Backpropagation
 
@@ -118,19 +114,22 @@ The change of a weight for <img src="/tex/2f118ee06d05f3c2d98361d9c30e38ce.svg?i
 
 ### Algorithm summary
 
-- initialize network weights to a small random value
+First, initialize network weights to a small random value. 
+
+Repeat the steps below until the error is about <img src="/tex/29632a9bf827ce0200454dd32fc3be82.svg?invert_in_darkmode&sanitize=true" align=middle width=8.219209349999991pt height=21.18721440000001pt/>
+
 - for each association, propagate the network forward and get the outputs
-  - calculate the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term for each output layer node (<img src="/tex/df9fdf72f97ac36f131b95a7e6d8fa93.svg?invert_in_darkmode&sanitize=true" align=middle width=66.60590639999998pt height=19.1781018pt/>)  
-  - accumulate the gradient for each output weight (<img src="/tex/7370368d7203297b19309fc65306c6ee.svg?invert_in_darkmode&sanitize=true" align=middle width=39.07458719999999pt height=22.831056599999986pt/>)  
-  - calculate the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term for each hidden layer node (<img src="/tex/e2658effcc7021b58619a65706b94243.svg?invert_in_darkmode&sanitize=true" align=middle width=170.9307534pt height=32.256008400000006pt/>)  
-  - accumulate the gradient for each hidden layer weight (<img src="/tex/c6030a58bf6eac6e114111d20953f5e1.svg?invert_in_darkmode&sanitize=true" align=middle width=38.209792499999985pt height=22.831056599999986pt/>) 
+  - calculate the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term for each output layer node (<img src="/tex/df9fdf72f97ac36f131b95a7e6d8fa93.svg?invert_in_darkmode&sanitize=true" align=middle width=66.60590639999998pt height=19.1781018pt/>)
+  - accumulate the gradient for each output weight (<img src="/tex/7370368d7203297b19309fc65306c6ee.svg?invert_in_darkmode&sanitize=true" align=middle width=39.07458719999999pt height=22.831056599999986pt/>)
+  - calculate the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term for each hidden layer node (<img src="/tex/e2658effcc7021b58619a65706b94243.svg?invert_in_darkmode&sanitize=true" align=middle width=170.9307534pt height=32.256008400000006pt/>)
+  - accumulate the gradient for each hidden layer weight (<img src="/tex/c6030a58bf6eac6e114111d20953f5e1.svg?invert_in_darkmode&sanitize=true" align=middle width=38.209792499999985pt height=22.831056599999986pt/>)
 - update all weights and reset accumulated gradients (<img src="/tex/ee701a4682b8b020790a6e5d3183bd37.svg?invert_in_darkmode&sanitize=true" align=middle width=178.84515495pt height=32.256008400000006pt/>)
 
 ### Visualizing backpropagation
 
-In this example, we'll use real numbers to follow each step of the network. We'll feed our 2x2x1 network with inputs <img src="/tex/e4f0b9bce59fcd6b7ace485069c84ced.svg?invert_in_darkmode&sanitize=true" align=middle width=58.44761669999998pt height=24.65753399999998pt/> and we will expect an output of <img src="/tex/51d89c4114d0201a214771c31c6bff9f.svg?invert_in_darkmode&sanitize=true" align=middle width=30.137091599999987pt height=24.65753399999998pt/>. To make matters simpler, we'll initialize all of our weights with the same value of <img src="/tex/cde2d598001a947a6afd044a43d15629.svg?invert_in_darkmode&sanitize=true" align=middle width=21.00464354999999pt height=21.18721440000001pt/>. However, keep in mind that normally weights are initialized using random numbers. We will also design the network with a sigmoid activation function for the hidden layer and the identity function for the input and output layers. 
+In this example, we'll use actual numbers to follow each step of the network. We'll feed our 2x2x1 network with inputs <img src="/tex/e4f0b9bce59fcd6b7ace485069c84ced.svg?invert_in_darkmode&sanitize=true" align=middle width=58.44761669999998pt height=24.65753399999998pt/> and we will expect an output of <img src="/tex/51d89c4114d0201a214771c31c6bff9f.svg?invert_in_darkmode&sanitize=true" align=middle width=30.137091599999987pt height=24.65753399999998pt/>. To make matters simpler, we'll initialize all of our weights with the same value of <img src="/tex/cde2d598001a947a6afd044a43d15629.svg?invert_in_darkmode&sanitize=true" align=middle width=21.00464354999999pt height=21.18721440000001pt/>. However, keep in mind that normally weights are initialized using random numbers. We will also design the network with a sigmoid activation function for the hidden layer and the identity function for the input and output layers. 
 
-#### The forward pass
+#### Forward pass
 
 We start by setting all of the nodes of the input layer with the input values; <img src="/tex/902d9d457b5dd887bab6109f2939c439.svg?invert_in_darkmode&sanitize=true" align=middle width=126.68932649999998pt height=21.18721440000001pt/>. 
 
@@ -156,7 +155,7 @@ Since we didn't assign an activation function to our output layer node, then <im
 
 ![backpropagation-visual](readme-images/backprop-visual-5.jpg)
 
-#### The backward pass
+#### Backward pass
 
 ...
 
