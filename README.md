@@ -24,7 +24,7 @@ Backpropagation is a technique used to teach a neural network that has at least 
 
 ### Introducing the perceptron
 
-A perceptron is the same as our artificial neuron from part 1 of this series, expect that it has an activation threshold. 
+A perceptron is the same as our artificial neuron from part 1 of this series, expect that it has an activation function <img src="/tex/190083ef7a1625fbc75f243cffb9c96d.svg?invert_in_darkmode&sanitize=true" align=middle width=9.81741584999999pt height=22.831056599999986pt/> that determines its output <img src="/tex/deceeaf6940a8c7a5a02373728002b0f.svg?invert_in_darkmode&sanitize=true" align=middle width=8.649225749999989pt height=14.15524440000002pt/>. 
 
 ![perceptron](readme-images/perceptron.jpg)
 
@@ -119,13 +119,12 @@ The change of a weight for <img src="/tex/2f118ee06d05f3c2d98361d9c30e38ce.svg?i
 ### Algorithm summary
 
 - initialize network weights to a small random value
-- while error gradient is not ~<img src="/tex/29632a9bf827ce0200454dd32fc3be82.svg?invert_in_darkmode&sanitize=true" align=middle width=8.219209349999991pt height=21.18721440000001pt/> 
-  - for each association, propagate the network forward and get the outputs
-    - accumulate the $\delta$ term for each output layer node ($y_{kt} - y\prime_{kt}$)  
-    - accumulate the gradient for each output weight ($\delta_{kt} z_{jt}$)  
-    - accumulate the $\delta$ term for each hidden layer node ($z_{jt}(1 - z_{jt})\sum^K_{k = 1}\delta_{kt} w_{jt}$)  
-    - accumulate the gradient for each hidden layer weight ($\delta_{jt} x_{it}$) 
-  - update all weights and reset accumulated gradient and delta values (<img src="/tex/ee701a4682b8b020790a6e5d3183bd37.svg?invert_in_darkmode&sanitize=true" align=middle width=178.84515495pt height=32.256008400000006pt/>)
+- for each association, propagate the network forward and get the outputs
+  - calculate the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term for each output layer node (<img src="/tex/df9fdf72f97ac36f131b95a7e6d8fa93.svg?invert_in_darkmode&sanitize=true" align=middle width=66.60590639999998pt height=19.1781018pt/>)  
+  - accumulate the gradient for each output weight (<img src="/tex/7370368d7203297b19309fc65306c6ee.svg?invert_in_darkmode&sanitize=true" align=middle width=39.07458719999999pt height=22.831056599999986pt/>)  
+  - calculate the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term for each hidden layer node (<img src="/tex/e2658effcc7021b58619a65706b94243.svg?invert_in_darkmode&sanitize=true" align=middle width=170.9307534pt height=32.256008400000006pt/>)  
+  - accumulate the gradient for each hidden layer weight (<img src="/tex/c6030a58bf6eac6e114111d20953f5e1.svg?invert_in_darkmode&sanitize=true" align=middle width=38.209792499999985pt height=22.831056599999986pt/>) 
+- update all weights and reset accumulated gradients (<img src="/tex/ee701a4682b8b020790a6e5d3183bd37.svg?invert_in_darkmode&sanitize=true" align=middle width=178.84515495pt height=32.256008400000006pt/>)
 
 ### Visualizing backpropagation
 
