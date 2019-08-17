@@ -26,7 +26,15 @@ Backpropagation is a technique used to teach a neural network that has at least 
 
 ### Introducing the perceptron
 
-A perceptron is the same as our artificial neuron from part 1 of this series, expect that it has an activation function <img src="/tex/190083ef7a1625fbc75f243cffb9c96d.svg?invert_in_darkmode&sanitize=true" align=middle width=9.81741584999999pt height=22.831056599999986pt/> that determines its output <img src="/tex/deceeaf6940a8c7a5a02373728002b0f.svg?invert_in_darkmode&sanitize=true" align=middle width=8.649225749999989pt height=14.15524440000002pt/>. 
+A perceptron is a processing unit that takes an input <img src="/tex/332cc365a4987aacce0ead01b8bdcc0b.svg?invert_in_darkmode&sanitize=true" align=middle width=9.39498779999999pt height=14.15524440000002pt/>, transforms it using an activation function <img src="/tex/190083ef7a1625fbc75f243cffb9c96d.svg?invert_in_darkmode&sanitize=true" align=middle width=9.81741584999999pt height=22.831056599999986pt/> and outputs the result <img src="/tex/deceeaf6940a8c7a5a02373728002b0f.svg?invert_in_darkmode&sanitize=true" align=middle width=8.649225749999989pt height=14.15524440000002pt/>. 
+
+Just as we saw in *part 1*, its input is the sum of the previous layer node outputs times their corresponding weight, plus the previous layer bias unit times its weight:
+
+<p align="center"><img src="/tex/364a0eb6624fe587c128c4de95f94f58.svg?invert_in_darkmode&sanitize=true" align=middle width=158.0792961pt height=47.806078649999996pt/></p>
+
+If we treat the bias as an additional node in a layer with a constant value of <img src="/tex/e11a8cfcf953c683196d7a48677b2277.svg?invert_in_darkmode&sanitize=true" align=middle width=21.00464354999999pt height=21.18721440000001pt/>, then we can simplify the equation:
+
+<p align="center"><img src="/tex/7c6f451f5ce1a1ee8880a8a4c1b64be0.svg?invert_in_darkmode&sanitize=true" align=middle width=102.11472149999999pt height=47.806078649999996pt/></p>
 
 ![perceptron](readme-images/perceptron.jpg)
 
@@ -48,11 +56,13 @@ It's using a forward pass to compute the outputs of the network, calculates the 
 
 #### Notation
 
-![notation](readme-images/backpropagation-notation.jpg)
+- <img src="/tex/beb7fb5a05eb06456ac32c429a488e7c.svg?invert_in_darkmode&sanitize=true" align=middle width=62.46195944999999pt height=14.15524440000002pt/>, are inputs to a node for layers <img src="/tex/b8e8ee904bff633d4f9b547d63ab02c3.svg?invert_in_darkmode&sanitize=true" align=middle width=47.134574849999986pt height=22.465723500000017pt/> respectively. 
+- <img src="/tex/deafcef8509ceda8122d0f571d95d999.svg?invert_in_darkmode&sanitize=true" align=middle width=58.45528919999998pt height=14.15524440000002pt/>, are the outputs from a node for layers <img src="/tex/b8e8ee904bff633d4f9b547d63ab02c3.svg?invert_in_darkmode&sanitize=true" align=middle width=47.134574849999986pt height=22.465723500000017pt/> respectively. 
+- <img src="/tex/2044a83864c2e5cb971dfb7289018a53.svg?invert_in_darkmode&sanitize=true" align=middle width=20.43577799999999pt height=18.264896099999987pt/> is the expected output of a node of the <img src="/tex/d6328eaebbcd5c358f426dbea4bdbf70.svg?invert_in_darkmode&sanitize=true" align=middle width=15.13700594999999pt height=22.465723500000017pt/> output layer. 
+- <img src="/tex/22ed3508464d792f01cafea152faf749.svg?invert_in_darkmode&sanitize=true" align=middle width=55.79069924999999pt height=14.15524440000002pt/> are weights of node connections from layer <img src="/tex/21fd4e8eecd6bdf1a4d3d6bd1fb8d733.svg?invert_in_darkmode&sanitize=true" align=middle width=8.515988249999989pt height=22.465723500000017pt/> to <img src="/tex/8eb543f68dac24748e65e2e4c5fc968c.svg?invert_in_darkmode&sanitize=true" align=middle width=10.69635434999999pt height=22.465723500000017pt/> and from layer <img src="/tex/8eb543f68dac24748e65e2e4c5fc968c.svg?invert_in_darkmode&sanitize=true" align=middle width=10.69635434999999pt height=22.465723500000017pt/> to <img src="/tex/d6328eaebbcd5c358f426dbea4bdbf70.svg?invert_in_darkmode&sanitize=true" align=middle width=15.13700594999999pt height=22.465723500000017pt/> respectively.
+- <img src="/tex/4f4f4e395762a3af4575de74c019ebb5.svg?invert_in_darkmode&sanitize=true" align=middle width=5.936097749999991pt height=20.221802699999984pt/> is the current association out of <img src="/tex/2f118ee06d05f3c2d98361d9c30e38ce.svg?invert_in_darkmode&sanitize=true" align=middle width=11.889314249999991pt height=22.465723500000017pt/> associations. 
 
-<img src="/tex/4f4f4e395762a3af4575de74c019ebb5.svg?invert_in_darkmode&sanitize=true" align=middle width=5.936097749999991pt height=20.221802699999984pt/> being the current association out of <img src="/tex/2f118ee06d05f3c2d98361d9c30e38ce.svg?invert_in_darkmode&sanitize=true" align=middle width=11.889314249999991pt height=22.465723500000017pt/> associations. 
-
-We will assign the following activation functions to each layer perceptrons:
+We will assign the following activation functions to each layer perceptrons for all following examples:
 
 - input layer -> identity function
 - hidden layer -> sigmoid function
@@ -62,21 +72,21 @@ We will assign the following activation functions to each layer perceptrons:
 
 During the forward pass, we feed the inputs to the input layer and get the results in the output layer. 
 
-The input to each perceptron in the hidden layer <img src="/tex/f8bbbfffa921d3289fa9fdb9a1cf47c4.svg?invert_in_darkmode&sanitize=true" align=middle width=20.48055239999999pt height=14.15524440000002pt/> is the sum of all perceptron of the previous layer times their corresponding weight:
+The input to each perceptron in the hidden layer <img src="/tex/37b7efd01cadaf004426bbffacbe789e.svg?invert_in_darkmode&sanitize=true" align=middle width=20.465266799999988pt height=14.15524440000002pt/> is the sum of all perceptron of the previous layer times their corresponding weight:
 
-<p align="center"><img src="/tex/634b2baa2264a3d1e63748c5bbe16883.svg?invert_in_darkmode&sanitize=true" align=middle width=112.0615452pt height=47.806078649999996pt/></p>
+<p align="center"><img src="/tex/5d70e98d4c0a50ab91845bcaf8f1c148.svg?invert_in_darkmode&sanitize=true" align=middle width=112.04626124999999pt height=47.806078649999996pt/></p>
 
 However, since our hidden layer's activation function for each perceptron is the sigmoid, then their output will be: 
 
-<p align="center"><img src="/tex/5600978e3afab43af2339742b528e132.svg?invert_in_darkmode&sanitize=true" align=middle width=207.6529389pt height=18.905967299999997pt/></p>
+<p align="center"><img src="/tex/c8e35d5cf0e85503ce933db89a6ceb9c.svg?invert_in_darkmode&sanitize=true" align=middle width=207.7346304pt height=18.905967299999997pt/></p>
 
 In the same manner, the input to the output layer perceptrons are
 
-<p align="center"><img src="/tex/089ae982e01cf7066a17c61d442e4e09.svg?invert_in_darkmode&sanitize=true" align=middle width=115.5414876pt height=50.04352485pt/></p>
+<p align="center"><img src="/tex/1ea3438c06b1a112d773b02b7b4fd402.svg?invert_in_darkmode&sanitize=true" align=middle width=115.94097899999998pt height=50.04352485pt/></p>
 
 and their output is the same since we assigned them the identity activation function. 
 
-<p align="center"><img src="/tex/ed55f30fd57b7f81e3eb501fd93a0426.svg?invert_in_darkmode&sanitize=true" align=middle width=137.97585285pt height=16.438356pt/></p>
+<p align="center"><img src="/tex/09afeca56ff80b12106c808e9ac097fb.svg?invert_in_darkmode&sanitize=true" align=middle width=137.9452833pt height=16.438356pt/></p>
 
 Once the inputs have been propagated through the network, we can calculate the error:
 
@@ -92,19 +102,19 @@ We know from *part 1* that the change of a weight is the negative of that weight
 
 We can find the error gradient by using the chain rule
 
-<p align="center"><img src="/tex/b96abf43fa8539cc9ea550f3860b16fa.svg?invert_in_darkmode&sanitize=true" align=middle width=383.52490109999997pt height=38.5152603pt/></p>
+<p align="center"><img src="/tex/4cd82dbea08570fbcff0df63b4ed570a.svg?invert_in_darkmode&sanitize=true" align=middle width=383.9243793pt height=38.5152603pt/></p>
 
 Similarly, for a weight between hidden layers, in our case between the input layer and our first hidden layer, we have
 
 <p align="center"><img src="/tex/6a7b90b9efb24cc2b6ecdfdadd20791b.svg?invert_in_darkmode&sanitize=true" align=middle width=118.34445975pt height=38.5152603pt/></p>
 
-<p align="center"><img src="/tex/26d8e54af9b9c5f2195681156b3cdddd.svg?invert_in_darkmode&sanitize=true" align=middle width=463.55822865pt height=48.18280005pt/></p>
+<p align="center"><img src="/tex/a744eadb2e66bcbb33e45eedf1240f2a.svg?invert_in_darkmode&sanitize=true" align=middle width=464.3724821999999pt height=48.18280005pt/></p>
 
 Here the calculations are *slightly* more complex. Let's analyze the delta term <img src="/tex/a3ec72e0f05115605b57d81cfab96e7d.svg?invert_in_darkmode&sanitize=true" align=middle width=18.37621829999999pt height=22.831056599999986pt/> and understand how we got there. We start by calculating the partial derivative of <img src="/tex/f8bbbfffa921d3289fa9fdb9a1cf47c4.svg?invert_in_darkmode&sanitize=true" align=middle width=20.48055239999999pt height=14.15524440000002pt/> in respect to the error by using the chain rule
 
-<p align="center"><img src="/tex/e4d98a206a2733836d784f9065398280.svg?invert_in_darkmode&sanitize=true" align=middle width=119.78647559999999pt height=38.5152603pt/></p>
+<p align="center"><img src="/tex/27d8e79faef062f9f5ee979318bc8d9f.svg?invert_in_darkmode&sanitize=true" align=middle width=120.17064509999999pt height=38.5152603pt/></p>
 
-<p align="center"><img src="/tex/18091e78f58dcc23ad486df3e2b7b347.svg?invert_in_darkmode&sanitize=true" align=middle width=513.72992715pt height=48.18280005pt/></p>
+<p align="center"><img src="/tex/45a199a55d24da3882cf776b427f046a.svg?invert_in_darkmode&sanitize=true" align=middle width=515.20994085pt height=48.18280005pt/></p>
 
 Remember that our activation function <img src="/tex/190083ef7a1625fbc75f243cffb9c96d.svg?invert_in_darkmode&sanitize=true" align=middle width=9.81741584999999pt height=22.831056599999986pt/> is the sigmoid function and that its derivative is <img src="/tex/63905ec601ca88b13ff9a43d55aee30f.svg?invert_in_darkmode&sanitize=true" align=middle width=105.09150299999999pt height=24.65753399999998pt/>
 
@@ -120,8 +130,8 @@ Repeat the steps below until the error is about <img src="/tex/29632a9bf827ce020
 
 - for each association, propagate the network forward and get the outputs
   - calculate the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term for each output layer node (<img src="/tex/df9fdf72f97ac36f131b95a7e6d8fa93.svg?invert_in_darkmode&sanitize=true" align=middle width=66.60590639999998pt height=19.1781018pt/>)
-  - accumulate the gradient for each output weight (<img src="/tex/7370368d7203297b19309fc65306c6ee.svg?invert_in_darkmode&sanitize=true" align=middle width=39.07458719999999pt height=22.831056599999986pt/>)
-  - calculate the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term for each hidden layer node (<img src="/tex/e2658effcc7021b58619a65706b94243.svg?invert_in_darkmode&sanitize=true" align=middle width=170.9307534pt height=32.256008400000006pt/>)
+  - accumulate the gradient for each output weight (<img src="/tex/c0e74ee9a32d2c89a9710dcacfab145b.svg?invert_in_darkmode&sanitize=true" align=middle width=39.48936419999999pt height=22.831056599999986pt/>)
+  - calculate the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term for each hidden layer node (<img src="/tex/e53349390d41cec36f5431c3736f598f.svg?invert_in_darkmode&sanitize=true" align=middle width=171.76030905pt height=32.256008400000006pt/>)
   - accumulate the gradient for each hidden layer weight (<img src="/tex/c6030a58bf6eac6e114111d20953f5e1.svg?invert_in_darkmode&sanitize=true" align=middle width=38.209792499999985pt height=22.831056599999986pt/>)
 - update all weights and reset accumulated gradients (<img src="/tex/ee701a4682b8b020790a6e5d3183bd37.svg?invert_in_darkmode&sanitize=true" align=middle width=178.84515495pt height=32.256008400000006pt/>)
 
