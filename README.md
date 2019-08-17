@@ -11,6 +11,7 @@ Backpropagation is a technique used to teach a neural network that has at least 
 
 - [Theory](#theory)  
   - [Introducing the perceptron](#introducing-the-perceptron)
+    - [Activation functions](#activation-functions)
   - [Backpropagation](#backpropagation)
     - [Notation](#notation)
     - [The forward pass](#the-forward-pass)
@@ -38,15 +39,17 @@ If we treat the bias as an additional node in a layer with a constant value of <
 
 ![perceptron](readme-images/perceptron.jpg)
 
-#### Some activation functions
+#### Activation functions
 
-If <img src="/tex/22a1bca1370e6ec943222dc2ea608065.svg?invert_in_darkmode&sanitize=true" align=middle width=73.66339529999999pt height=24.657735299999988pt/> then typical activation functions are:
+Why do we need an activation function? Without them the output of every node will be linear, making the neural network output a linear function of the inputs. Since the combination of two linear functions is also a linear function, you can't compute more interesting functions without non-linear one. This means that the network will only be able to solve problems that can be solved with linear regression. 
 
-- Sigmoid <img src="/tex/d86b02d0ff42235bec29783460db8196.svg?invert_in_darkmode&sanitize=true" align=middle width=72.10045094999998pt height=27.77565449999998pt/>
+If <img src="/tex/36d6e7b3abf42ac72c9766d04e081cf1.svg?invert_in_darkmode&sanitize=true" align=middle width=73.64811134999998pt height=24.657735299999988pt/> then typical activation functions are:
 
-- ReLU or rectified linear unit <img src="/tex/e1ffed025adfa4b6f4c2d0b31b8a7148.svg?invert_in_darkmode&sanitize=true" align=middle width=100.80487889999998pt height=24.65753399999998pt/>
+- Sigmoid <img src="/tex/06a4dabcd23aee6477642df56f5823d0.svg?invert_in_darkmode&sanitize=true" align=middle width=71.65327124999999pt height=27.77565449999998pt/>
 
-- tanh <img src="/tex/4ad8e0d09581519fd366703474f136cb.svg?invert_in_darkmode&sanitize=true" align=middle width=86.72578694999999pt height=24.65753399999998pt/>
+- ReLU or rectified linear unit <img src="/tex/2303c524a588b86a618bd6158a13de22.svg?invert_in_darkmode&sanitize=true" align=middle width=100.78959329999998pt height=24.65753399999998pt/>
+
+- tanh <img src="/tex/d780a3472dc758b220b61dab83747006.svg?invert_in_darkmode&sanitize=true" align=middle width=86.71050134999999pt height=24.65753399999998pt/>
 
 ### Backpropagation
 
@@ -179,8 +182,13 @@ The example teaches a 2x2x1 network the XOR operator.
 
 Where <img src="/tex/190083ef7a1625fbc75f243cffb9c96d.svg?invert_in_darkmode&sanitize=true" align=middle width=9.81741584999999pt height=22.831056599999986pt/> is the sigmoid function for the hidden layer nodes. 
 
+Note that the XOR operation could not be solved with the linear network used in *part 1* because the dataset is distributed non-linearly. Meaning you could not pass a straight line between the four XOR inputs to divide them into the correct two categories. If we replaced the hidden layer node activation functions from sigmoid to identity, this network wouldn't be able to solve the XOR problem as well. 
+
+Feel free to try it out yourself and experiment with different activation functions, learning rates and network topologies. 
+
 ## References
 
 - Artificial intelligence engines by James V Stone (2019)
-- http://neuralnetworksanddeeplearning.com/chap2.html
-- https://google-developers.appspot.com/machine-learning/crash-course/backprop-scroll/
+- Complete guide on deep learning: http://neuralnetworksanddeeplearning.com/chap2.html
+- Flow of backpropagation visualized: https://google-developers.appspot.com/machine-learning/crash-course/backprop-scroll/
+- Activation functions: https://medium.com/the-theory-of-everything/understanding-activation-functions-in-neural-networks-9491262884e0
