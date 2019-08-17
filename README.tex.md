@@ -24,7 +24,7 @@ Backpropagation is a technique used to teach a neural network that has at least 
 
 ### Introducing the perceptron
 
-A perceptron is the same as our artificial neuron from part 1 of this series, expect that it has an activation threshold. 
+A perceptron is the same as our artificial neuron from part 1 of this series, expect that it has an activation function $f$ that determines its output $y$. 
 
 ![perceptron](readme-images/perceptron.jpg)
 
@@ -119,13 +119,12 @@ $$ \Delta w_{ij} = -\epsilon \sum^T_{t = 1} \delta_{jt} x_{it} $$
 ### Algorithm summary
 
 - initialize network weights to a small random value
-- while error gradient is not ~$0$ 
-  - for each association, propagate the network forward and get the outputs
-    - accumulate the $\delta$ term for each output layer node ($y_{kt} - y\prime_{kt}$)  
-    - accumulate the gradient for each output weight ($\delta_{kt} z_{jt}$)  
-    - accumulate the $\delta$ term for each hidden layer node ($z_{jt}(1 - z_{jt})\sum^K_{k = 1}\delta_{kt} w_{jt}$)  
-    - accumulate the gradient for each hidden layer weight ($\delta_{jt} x_{it}$) 
-  - update all weights and reset accumulated gradient and delta values ($w_{ij} = w_{ij} - \epsilon \sum^T_{t = 1}\delta_{jt} x_{it}$)
+- for each association, propagate the network forward and get the outputs
+  - calculate the $\delta$ term for each output layer node ($y_{kt} - y\prime_{kt}$)  
+  - accumulate the gradient for each output weight ($\delta_{kt} z_{jt}$)  
+  - calculate the $\delta$ term for each hidden layer node ($z_{jt}(1 - z_{jt})\sum^K_{k = 1}\delta_{kt} w_{jt}$)  
+  - accumulate the gradient for each hidden layer weight ($\delta_{jt} x_{it}$) 
+- update all weights and reset accumulated gradients ($w_{ij} = w_{ij} - \epsilon \sum^T_{t = 1}\delta_{jt} x_{it}$)
 
 ### Visualizing backpropagation
 
