@@ -4,7 +4,7 @@ Backpropagation is a technique used to teach a neural network that has at least 
 
 ## This is part 2 of a series of github repos on neural networks
 
-- [part 1 - linear associative network](https://github.com/gokadin/ai-linear-associative-network)
+- [part 1 - simplest network](https://github.com/gokadin/ai-simplest-network)
 - part 2 - backpropagation (**you are here**)
 
 ## Table of Contents
