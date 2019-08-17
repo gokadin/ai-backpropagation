@@ -75,7 +75,7 @@ func learn(network *layerCollection, inputs [][]float64, expectedOutputs [][]flo
 
 		err /= 2
 		fmt.Println("error:", err)
-		if err < 0.00001 {
+		if err < 0.0001 {
 			learn = false
 			fmt.Println("Network finished learning.")
 		}

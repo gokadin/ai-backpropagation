@@ -16,6 +16,7 @@ Backpropagation is a technique used to teach a neural network that has at least 
     - [The forward pass](#the-forward-pass)
     - [The backward pass](#the-backward-pass)
   - [Algorithm summary](#algorithm-summary)
+  - [Visualizing backpropagation](#visualizing-backpropagation)
 - [Code example](#code-example)
 - [References](#references)
 
@@ -97,13 +98,13 @@ We can find the error gradient by using the chain rule
 
 $$ \frac{\partial E_t}{\partial w_{jk}} = \frac{\partial E_t}{\partial u_{kt}} \frac{\partial u_{kt}}{\partial w_{jk}} = \delta_{kt} z_{jt} \quad where \quad \delta_{kt} = y_{kt} - y\prime_{kt} $$
 
-Similarily, for a weight between hidden layers, in our case between the input layer and our first hidden layer, we have
+Similarly, for a weight between hidden layers, in our case between the input layer and our first hidden layer, we have
 
 $$ \Delta w_{ijt} = -\epsilon \frac{\partial E_t}{\partial w_{ij}} $$
 
 $$ \frac{\partial E_t}{\partial w_{ij}} = \frac{\partial E_t}{\partial u_{jt}} \frac{\partial u_{jt}}{\partial w_{ij}} = \delta_{jt} x_{it} \quad where \quad \delta_{jt} = z_{jt} (1 - z_{jt}) \sum^K_{k = 1} \delta_{kt} w_{jk} $$
 
-Here the calculations are *slightly* more complex. Let's analyse the delta term $\delta_{jt}$ and understand how we got there. We start by calculating the partial derivative of $u_{jt}$ in respect to the error by using the chain rule
+Here the calculations are *slightly* more complex. Let's analyze the delta term $\delta_{jt}$ and understand how we got there. We start by calculating the partial derivative of $u_{jt}$ in respect to the error by using the chain rule
 
 $$ \frac{\partial E_t}{\partial u_{jt}} = \frac{\partial E_t}{\partial z_{jt}} \frac{d z_{jt}}{du_{jt}} $$
 
@@ -117,11 +118,63 @@ $$ \Delta w_{ij} = -\epsilon \sum^T_{t = 1} \delta_{jt} x_{it} $$
 
 ### Algorithm summary
 
+- initialize network weights to a small random value
+- while error gradient is not ~$0$ 
+  - for each association, propagate the network forward and get the outputs
+    - accumulate the $\delta$ term for each output layer node ($y_{kt} - y\prime_{kt}$)
+    - accumulate the gradient for each output weight ($\delta_{kt} z_{jt}$)
+    - accumulate the $\delta$ term for each hidden layer node ($z_{jt}(1 - z_{jt})\sum^K_{k = 1}\delta_{kt} w_{jt}$)
+    - accumulate the gradient for each hidden layer weight ($\delta_{jt} x_{it}$)
+  - update all weights and reset accumulated gradient and delta values ($w_{ij} = w_{ij} - \epsilon \sum^T_{t = 1}\delta_{jt} x_{it}$)
+
+### Visualizing backpropagation
+
+In this example, we'll use real numbers to follow each step of the network. We'll feed our 2x2x1 network with inputs $[1.0, 1.0]$ and we will expect an output of $[0.5]$. To make matters simpler, we'll initialize all of our weights with the same value of $0.5$. However, keep in mind that normally weights are initialized using random numbers. 
+
+#### The forward pass
+
+We start by setting all of the nodes of the input layer with the input values; $x_1 = 1.0, x_2 = 1.0$. 
+
+Since the input layer nodes have no activation function, then $y_i = x_i = 1.0$. 
+
+![backpropagation-visual](readme-images/backprop-visual-1.jpg)
+
+We then propagate the network forward by setting the $J$ layer node inputs ($x_j$) with the sum of all of the previous layer node outputs times their corresponding weights:
+
+$$ x_j = \sum^I_{i = 1} x_i w_{ij} = 1.0 * 0.5 + 1.0 * 0.5 = 1.0 $$
+
+![backpropagation-visual](readme-images/backprop-visual-2.jpg)
+
+![backpropagation-visual](readme-images/backprop-visual-3.jpg)
+
+We then activate the $J$ layer nodes by passing it's inputs to the sigmoid function $f(x) = \frac{1}{1 + e^{-x}}$
+
+![backpropagation-visual](readme-images/backprop-visual-4.jpg)
+
+And we propagate those results to the final layer $x_k = 0.731 * 0.5 + 0.731 * 0.5 = 0.731$
+
+Since we didn't assign an activation function to our output layer node, then $y_k = x_k = 0.731$
+
+![backpropagation-visual](readme-images/backprop-visual-5.jpg)
+
+#### The backward pass
+
 ...
 
 ## Code example
 
-under construction...
+The example teaches a 2x2x1 network the XOR operator. 
+
+$$ x = \begin{bmatrix}
+    1.0 & 1.0 & 0.0 & 0.0 \\
+    1.0 & 0.0 & 1.0 & 0.0 \\ 
+\end{bmatrix} \quad y\prime = \begin{bmatrix}
+    0.0 & 1.0 & 1.0 & 0.0 \\
+\end{bmatrix} $$
+
+![code-example](readme-images/backpropagation-code-example.jpg)
+
+Where $f$ is the sigmoid function for the hidden layer nodes. 
 
 ## References
 
