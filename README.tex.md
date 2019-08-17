@@ -11,6 +11,7 @@ Backpropagation is a technique used to teach a neural network that has at least 
 
 - [Theory](#theory)  
   - [Introducing the perceptron](#introducing-the-perceptron)
+    - [Activation functions](#activation-functions)
   - [Backpropagation](#backpropagation)
     - [Notation](#notation)
     - [The forward pass](#the-forward-pass)
@@ -38,15 +39,17 @@ $$ x_j = \sum^{I + 1}_{i = 1} x_iw_{ij} $$
 
 ![perceptron](readme-images/perceptron.jpg)
 
-#### Some activation functions
+#### Activation functions
 
-If $u = \sum{\vec{x}\vec{w}}$ then typical activation functions are:
+Why do we need an activation function? Without them the output of every node will be linear, making the neural network output a linear function of the inputs. Since the combination of two linear functions is also a linear function, you can't compute more interesting functions without non-linear one. This means that the network will only be able to solve problems that can be solved with linear regression. 
 
-- Sigmoid $\quad y = \frac{1}{1 + e^{-u}}$
+If $x = \sum{\vec{x}\vec{w}}$ then typical activation functions are:
 
-- ReLU or rectified linear unit $\quad y = max(0, u)$
+- Sigmoid $\quad y = \frac{1}{1 + e^{-x}}$
 
-- tanh $\quad y = tanh(u)$
+- ReLU or rectified linear unit $\quad y = max(0, x)$
+
+- tanh $\quad y = tanh(x)$
 
 ### Backpropagation
 
@@ -184,8 +187,13 @@ $$ x = \begin{bmatrix}
 
 Where $f$ is the sigmoid function for the hidden layer nodes. 
 
+Note that the XOR operation could not be solved with the linear network used in *part 1* because the dataset is distributed non-linearly. Meaning you could not pass a straight line between the four XOR inputs to divide them into the correct two categories. If we replaced the hidden layer node activation functions from sigmoid to identity, this network wouldn't be able to solve the XOR problem as well. 
+
+Feel free to try it out yourself and experiment with different activation functions, learning rates and network topologies. 
+
 ## References
 
 - Artificial intelligence engines by James V Stone (2019)
-- http://neuralnetworksanddeeplearning.com/chap2.html
-- https://google-developers.appspot.com/machine-learning/crash-course/backprop-scroll/
+- Complete guide on deep learning: http://neuralnetworksanddeeplearning.com/chap2.html
+- Flow of backpropagation visualized: https://google-developers.appspot.com/machine-learning/crash-course/backprop-scroll/
+- Activation functions: https://medium.com/the-theory-of-everything/understanding-activation-functions-in-neural-networks-9491262884e0
