@@ -26,7 +26,15 @@ Backpropagation is a technique used to teach a neural network that has at least 
 
 ### Introducing the perceptron
 
-A perceptron is the same as our artificial neuron from part 1 of this series, expect that it has an activation function $f$ that determines its output $y$. 
+A perceptron is a processing unit that takes an input $x$, transforms it using an activation function $f$ and outputs the result $y$. 
+
+Just as we saw in *part 1*, its input is the sum of the previous layer node outputs times their corresponding weight, plus the previous layer bias unit times its weight:
+
+$$ x_j = \sum^I_{i = 1} x_iw_{ij} + b_iw_{ij} $$
+
+If we treat the bias as an additional node in a layer with a constant value of $-1$, then we can simplify the equation:
+
+$$ x_j = \sum^{I + 1}_{i = 1} x_iw_{ij} $$
 
 ![perceptron](readme-images/perceptron.jpg)
 
@@ -48,11 +56,13 @@ It's using a forward pass to compute the outputs of the network, calculates the 
 
 #### Notation
 
-![notation](readme-images/backpropagation-notation.jpg)
+- $x_i, x_j, x_k$, are inputs to a node for layers $I, J, K$ respectively. 
+- $y_i, y_j, y_k$, are the outputs from a node for layers $I, J, K$ respectively. 
+- $y\prime_k$ is the expected output of a node of the $K$ output layer. 
+- $w_{ij}, w_{jk}$ are weights of node connections from layer $I$ to $J$ and from layer $J$ to $K$ respectively.
+- $t$ is the current association out of $T$ associations. 
 
-$t$ being the current association out of $T$ associations. 
-
-We will assign the following activation functions to each layer perceptrons:
+We will assign the following activation functions to each layer perceptrons for all following examples:
 
 - input layer -> identity function
 - hidden layer -> sigmoid function
@@ -62,21 +72,21 @@ We will assign the following activation functions to each layer perceptrons:
 
 During the forward pass, we feed the inputs to the input layer and get the results in the output layer. 
 
-The input to each perceptron in the hidden layer $u_{jt}$ is the sum of all perceptron of the previous layer times their corresponding weight:
+The input to each perceptron in the hidden layer $x_{jt}$ is the sum of all perceptron of the previous layer times their corresponding weight:
 
-$$u_{jt} = \sum_{i = 1}^{I} w_{ij}x_{it}$$
+$$x_{jt} = \sum_{i = 1}^{I} w_{ij}x_{it}$$
 
 However, since our hidden layer's activation function for each perceptron is the sigmoid, then their output will be: 
 
-$$ z_{jt} = f_j(u_{jt}) = (1 + e^{-u_{jt}})^{-1} $$
+$$ y_{jt} = f_j(x_{jt}) = (1 + e^{-x_{jt}})^{-1} $$
 
 In the same manner, the input to the output layer perceptrons are
 
-$$ u_{kt} = \sum^{J}_{j = 1} w_{jk}z_{jt} $$
+$$ x_{kt} = \sum^{J}_{j = 1} w_{jk}y_{jt} $$
 
 and their output is the same since we assigned them the identity activation function. 
 
-$$ y_{kt} = f_k(u_{kt}) = u_{kt} $$
+$$ y_{kt} = f_k(x_{kt}) = x_{kt} $$
 
 Once the inputs have been propagated through the network, we can calculate the error:
 
@@ -92,19 +102,19 @@ $$ \Delta w_{jkt} = -\epsilon \frac{\partial E_t}{\partial w_{jk}} $$
 
 We can find the error gradient by using the chain rule
 
-$$ \frac{\partial E_t}{\partial w_{jk}} = \frac{\partial E_t}{\partial u_{kt}} \frac{\partial u_{kt}}{\partial w_{jk}} = \delta_{kt} z_{jt} \quad where \quad \delta_{kt} = y_{kt} - y\prime_{kt} $$
+$$ \frac{\partial E_t}{\partial w_{jk}} = \frac{\partial E_t}{\partial x_{kt}} \frac{\partial x_{kt}}{\partial w_{jk}} = \delta_{kt} y_{jt} \quad where \quad \delta_{kt} = y_{kt} - y\prime_{kt} $$
 
 Similarly, for a weight between hidden layers, in our case between the input layer and our first hidden layer, we have
 
 $$ \Delta w_{ijt} = -\epsilon \frac{\partial E_t}{\partial w_{ij}} $$
 
-$$ \frac{\partial E_t}{\partial w_{ij}} = \frac{\partial E_t}{\partial u_{jt}} \frac{\partial u_{jt}}{\partial w_{ij}} = \delta_{jt} x_{it} \quad where \quad \delta_{jt} = z_{jt} (1 - z_{jt}) \sum^K_{k = 1} \delta_{kt} w_{jk} $$
+$$ \frac{\partial E_t}{\partial w_{ij}} = \frac{\partial E_t}{\partial x_{jt}} \frac{\partial x_{jt}}{\partial w_{ij}} = \delta_{jt} x_{it} \quad where \quad \delta_{jt} = y_{jt} (1 - y_{jt}) \sum^K_{k = 1} \delta_{kt} w_{jk} $$
 
 Here the calculations are *slightly* more complex. Let's analyze the delta term $\delta_{jt}$ and understand how we got there. We start by calculating the partial derivative of $u_{jt}$ in respect to the error by using the chain rule
 
-$$ \frac{\partial E_t}{\partial u_{jt}} = \frac{\partial E_t}{\partial z_{jt}} \frac{d z_{jt}}{du_{jt}} $$
+$$ \frac{\partial E_t}{\partial x_{jt}} = \frac{\partial E_t}{\partial y_{jt}} \frac{d y_{jt}}{dx_{jt}} $$
 
-$$ \frac{\partial E_t}{\partial z_{jt}} = \sum^K_{k = 1} \frac{\partial E_t}{\partial u_{kt}} \frac{\partial u_{kt}}{\partial z_{jt}} = \sum^K_{k = 1} \delta_{kt} w_{jk} \quad and \quad \frac{d z_{jt}}{du_{jt}} = f'(z_{jt}) = z_{jt}(1 - z{jt}) $$
+$$ \frac{\partial E_t}{\partial y_{jt}} = \sum^K_{k = 1} \frac{\partial E_t}{\partial x_{kt}} \frac{\partial x_{kt}}{\partial y_{jt}} = \sum^K_{k = 1} \delta_{kt} w_{jk} \quad and \quad \frac{dy_{jt}}{dx_{jt}} = f'(y_{jt}) = y_{jt}(1 - y{jt}) $$
 
 Remember that our activation function $f$ is the sigmoid function and that its derivative is $f(x)(1 - f(x))$
 
@@ -120,8 +130,8 @@ Repeat the steps below until the error is about $0$
 
 - for each association, propagate the network forward and get the outputs
   - calculate the $\delta$ term for each output layer node ($y_{kt} - y\prime_{kt}$)
-  - accumulate the gradient for each output weight ($\delta_{kt} z_{jt}$)
-  - calculate the $\delta$ term for each hidden layer node ($z_{jt}(1 - z_{jt})\sum^K_{k = 1}\delta_{kt} w_{jt}$)
+  - accumulate the gradient for each output weight ($\delta_{kt} y_{jt}$)
+  - calculate the $\delta$ term for each hidden layer node ($y_{jt}(1 - y_{jt})\sum^K_{k = 1}\delta_{kt} w_{jt}$)
   - accumulate the gradient for each hidden layer weight ($\delta_{jt} x_{it}$)
 - update all weights and reset accumulated gradients ($w_{ij} = w_{ij} - \epsilon \sum^T_{t = 1}\delta_{jt} x_{it}$)
 
