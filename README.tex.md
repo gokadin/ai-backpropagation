@@ -121,15 +121,15 @@ $$ \Delta w_{ij} = -\epsilon \sum^T_{t = 1} \delta_{jt} x_{it} $$
 - initialize network weights to a small random value
 - while error gradient is not ~$0$ 
   - for each association, propagate the network forward and get the outputs
-    - accumulate the $\delta$ term for each output layer node ($y_{kt} - y\prime_{kt}$)
-    - accumulate the gradient for each output weight ($\delta_{kt} z_{jt}$)
-    - accumulate the $\delta$ term for each hidden layer node ($z_{jt}(1 - z_{jt})\sum^K_{k = 1}\delta_{kt} w_{jt}$)
-    - accumulate the gradient for each hidden layer weight ($\delta_{jt} x_{it}$)
-  - update all weights and reset accumulated gradient and delta values ($w_{ij} = w_{ij} - \epsilon \sum^T_{t = 1}\delta_{jt} x_{it}$)
+    - accumulate the $\delta$ term for each output layer node $\quad y_{kt} - y\prime_{kt}$
+    - accumulate the gradient for each output weight $\quad \delta_{kt} z_{jt}$
+    - accumulate the $\delta$ term for each hidden layer node $\quad z_{jt}(1 - z_{jt})\sum^K_{k = 1}\delta_{kt} w_{jt}$
+    - accumulate the gradient for each hidden layer weight $\quad \delta_{jt} x_{it}$
+  - update all weights and reset accumulated gradient and delta values $\quad w_{ij} = w_{ij} - \epsilon \sum^T_{t = 1}\delta_{jt} x_{it}$
 
 ### Visualizing backpropagation
 
-In this example, we'll use real numbers to follow each step of the network. We'll feed our 2x2x1 network with inputs $[1.0, 1.0]$ and we will expect an output of $[0.5]$. To make matters simpler, we'll initialize all of our weights with the same value of $0.5$. However, keep in mind that normally weights are initialized using random numbers. 
+In this example, we'll use real numbers to follow each step of the network. We'll feed our 2x2x1 network with inputs $[1.0, 1.0]$ and we will expect an output of $[0.5]$. To make matters simpler, we'll initialize all of our weights with the same value of $0.5$. However, keep in mind that normally weights are initialized using random numbers. We will also design the network with a sigmoid activation function for the hidden layer and the identity function for the input and output layers. 
 
 #### The forward pass
 
