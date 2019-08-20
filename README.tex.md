@@ -129,18 +129,18 @@ $$ \Delta w_{ij} = -\epsilon \sum^T_{t = 1} \delta_{jt} x_{it} $$
 
 First, initialize network weights to a small random value. 
 
-Repeat the steps below until the error is about $0$
+Repeat the steps below until the error is about 0​
 
 - for each association, propagate the network forward and get the outputs
-  - calculate the $\delta$ term for each output layer node ($y_{kt} - y\prime_{kt}$)
-  - accumulate the gradient for each output weight ($\delta_{kt} y_{jt}$)
-  - calculate the $\delta$ term for each hidden layer node ($y_{jt}(1 - y_{jt})\sum^K_{k = 1}\delta_{kt} w_{jkt}$)
-  - accumulate the gradient for each hidden layer weight ($\delta_{jt} y_{it}$)
-- update all weights and reset accumulated gradients ($w_{ij} = w_{ij} - \epsilon \sum^T_{t = 1}\delta_{jt} x_{it}$)
+  - calculate the $\delta$ term for each output layer node ($\delta_k = y_{kt} - y\prime_{kt}$)
+  - accumulate the gradient for each output weight ($\nabla_{w_{jkt}}E_t = \delta_{kt} y_{jt}$)
+  - calculate the $\delta$ term for each hidden layer node ($\delta_j = y_{jt}(1 - y_{jt})\sum^K_{k = 1}\delta_{kt} w_{jkt}$)
+  - accumulate the gradient for each hidden layer weight ($\nabla_{w_{ijt}}E_t = \delta_{jt} y_{it}$)
+- update all weights and reset accumulated gradients ($w = w - \epsilon \nabla E$)
 
 ### Visualizing backpropagation
 
-In this example, we'll use actual numbers to follow each step of the network. We'll feed our 2x2x1 network with inputs $[1.0, 1.0]$ and we will expect an output of $[0.5]$. To make matters simpler, we'll initialize all of our weights with the same value of $0.5$. However, keep in mind that normally weights are initialized using random numbers. We will also design the network with a sigmoid activation function for the hidden layer and the identity function for the input and output layers. 
+In this example, we'll use actual numbers to follow each step of the network. We'll feed our 2x2x1 network with inputs $[1.0, 1.0]$ and we will expect an output of $[0.5]$. To make matters simpler, we'll initialize all of our weights with the same value of $0.5$. However, keep in mind that normally weights are initialized using random numbers. We will also design the network with a sigmoid activation function for the hidden layer and the identity function for the input and output layers and we'll use $\epsilon = 0.01$ as our learning rate. 
 
 #### Forward pass
 
@@ -188,9 +188,9 @@ And calculate the gradient for each weight between $I$ and $J$ layer nodes: $\na
 
 The last step is to update all of our weights using the calculate gradients. Note that if we had more than one association, then we would first accumulate the gradients for each association and then update the weights. 
 
-$w_{ij} = w_{ij} - \epsilon \nabla w_{ij} = 0.5 - 0.01 * 0.045854 = 0.49954146$
+$w_{ij} = w_{ij} - \epsilon \nabla w_{ij}E = 0.5 - 0.01 * 0.045854 = 0.49954146$
 
-$w_{jk} = w_{jk} - \epsilon \nabla w_{jk} = 0.5 - 0.01 * 0.168861 = 0.49831139$
+$w_{jk} = w_{jk} - \epsilon \nabla w_{jk}E = 0.5 - 0.01 * 0.168861 = 0.49831139$
 
 ![backpropagation-visual](readme-images/backprop-visual-10.jpg)
 
@@ -198,7 +198,7 @@ As you can see the weights changed by a very little amount, but if we were run a
 
 We had $y_1 = 0.731$ on our first iteration and we get $y \approx 0.728292$ after the weight changes. 
 
-We had $y_1 - y\prime_1 = 0.231$ and e get $y_2 - y\prime_2 = 0.228292$ after the weight changes. 
+We had $y_1 - y\prime_1 = 0.231$ and we get $y_2 - y\prime_2 = 0.228292$ after the weight changes. 
 
 We successfully reduced the error! Although these numbers are very small, they are much more representative of a real scenario. Running the algorithm many times over would normally reduce the error down to almost 0 and we'd have completed training our network. 
 
