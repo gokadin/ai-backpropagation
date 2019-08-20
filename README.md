@@ -134,8 +134,8 @@ Repeat the steps below until the error is about <img src="/tex/29632a9bf827ce020
 - for each association, propagate the network forward and get the outputs
   - calculate the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term for each output layer node (<img src="/tex/df9fdf72f97ac36f131b95a7e6d8fa93.svg?invert_in_darkmode&sanitize=true" align=middle width=66.60590639999998pt height=19.1781018pt/>)
   - accumulate the gradient for each output weight (<img src="/tex/c0e74ee9a32d2c89a9710dcacfab145b.svg?invert_in_darkmode&sanitize=true" align=middle width=39.48936419999999pt height=22.831056599999986pt/>)
-  - calculate the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term for each hidden layer node (<img src="/tex/e53349390d41cec36f5431c3736f598f.svg?invert_in_darkmode&sanitize=true" align=middle width=171.76030905pt height=32.256008400000006pt/>)
-  - accumulate the gradient for each hidden layer weight (<img src="/tex/c6030a58bf6eac6e114111d20953f5e1.svg?invert_in_darkmode&sanitize=true" align=middle width=38.209792499999985pt height=22.831056599999986pt/>)
+  - calculate the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term for each hidden layer node (<img src="/tex/e85c81a933ce2bba6ea2f9e1c547b568.svg?invert_in_darkmode&sanitize=true" align=middle width=179.02633815pt height=32.256008400000006pt/>)
+  - accumulate the gradient for each hidden layer weight (<img src="/tex/6fb7afd2325aa4ef6c5554150c6ae036.svg?invert_in_darkmode&sanitize=true" align=middle width=36.874236299999986pt height=22.831056599999986pt/>)
 - update all weights and reset accumulated gradients (<img src="/tex/ee701a4682b8b020790a6e5d3183bd37.svg?invert_in_darkmode&sanitize=true" align=middle width=178.84515495pt height=32.256008400000006pt/>)
 
 ### Visualizing backpropagation
@@ -170,7 +170,37 @@ Since we didn't assign an activation function to our output layer node, then <im
 
 #### Backward pass
 
-...
+On the way back, we first calculate the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term for the output node, <img src="/tex/3a6f0f1e5bd86ecdcec802bd7df7128a.svg?invert_in_darkmode&sanitize=true" align=middle width=254.62499204999997pt height=22.831056599999986pt/>
+
+![backpropagation-visual](readme-images/backprop-visual-6.jpg)
+
+And using the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term we calculate the gradient for each weight between <img src="/tex/8eb543f68dac24748e65e2e4c5fc968c.svg?invert_in_darkmode&sanitize=true" align=middle width=10.69635434999999pt height=22.465723500000017pt/> and <img src="/tex/d6328eaebbcd5c358f426dbea4bdbf70.svg?invert_in_darkmode&sanitize=true" align=middle width=15.13700594999999pt height=22.465723500000017pt/> layer nodes: <img src="/tex/7c8a5cedf3d6bc7b8e6fe760613a03b8.svg?invert_in_darkmode&sanitize=true" align=middle width=288.30400004999996pt height=22.831056599999986pt/>
+
+![backpropagation-visual](readme-images/backprop-visual-7.jpg)
+
+We then do the same thing for each hidden layer (just the one in our case): <img src="/tex/7dd64c125a608844d8c312950bf44045.svg?invert_in_darkmode&sanitize=true" align=middle width=667.39760505pt height=32.256008400000006pt/>
+
+![backpropagation-visual](readme-images/backprop-visual-8.jpg)
+
+And calculate the gradient for each weight between <img src="/tex/21fd4e8eecd6bdf1a4d3d6bd1fb8d733.svg?invert_in_darkmode&sanitize=true" align=middle width=8.515988249999989pt height=22.465723500000017pt/> and <img src="/tex/8eb543f68dac24748e65e2e4c5fc968c.svg?invert_in_darkmode&sanitize=true" align=middle width=10.69635434999999pt height=22.465723500000017pt/> layer nodes: <img src="/tex/18a461f126c5140c2e3cb5cddab946e9.svg?invert_in_darkmode&sanitize=true" align=middle width=291.29291564999994pt height=22.831056599999986pt/>
+
+![backpropagation-visual](readme-images/backprop-visual-9.jpg)
+
+The last step is to update all of our weights using the calculate gradients. Note that if we had more than one association, then we would first accumulate the gradients for each association and then update the weights. 
+
+<img src="/tex/a99e3ac48dd6b751a762792a6459a13d.svg?invert_in_darkmode&sanitize=true" align=middle width=402.7369698pt height=22.465723500000017pt/>
+
+<img src="/tex/29dc1dd1049d3ae10951594468e9cea0.svg?invert_in_darkmode&sanitize=true" align=middle width=410.5824129pt height=22.465723500000017pt/>
+
+![backpropagation-visual](readme-images/backprop-visual-10.jpg)
+
+As you can see the weights changed by a very little amount, but if we were run a forward pass again using the updated weights, we should normally get a smaller error than before. Let's check...
+
+We had <img src="/tex/371bbbdd40fff829396823dfeddfb94f.svg?invert_in_darkmode&sanitize=true" align=middle width=74.79458414999999pt height=21.18721440000001pt/> on our first iteration and we get <img src="/tex/a4395fb18072a7710c2b1c84536b085a.svg?invert_in_darkmode&sanitize=true" align=middle width=92.66752769999998pt height=21.18721440000001pt/> after the weight changes. 
+
+We had <img src="/tex/269cef8bad3668ba4ee6e04ccfab9729.svg?invert_in_darkmode&sanitize=true" align=middle width=115.42998224999998pt height=21.18721440000001pt/> and e get <img src="/tex/3768a90428bdba0b51a626d7c193cd96.svg?invert_in_darkmode&sanitize=true" align=middle width=140.08761029999997pt height=21.18721440000001pt/> after the weight changes. 
+
+We successfully reduced the error! Although these numbers are very small, they are much more representative of a real scenario. Running the algorithm many times over would normally reduce the error down to almost 0 and we'd have completed training our network. 
 
 ## Code example
 
