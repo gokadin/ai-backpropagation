@@ -134,8 +134,8 @@ Repeat the steps below until the error is about $0$
 - for each association, propagate the network forward and get the outputs
   - calculate the $\delta$ term for each output layer node ($y_{kt} - y\prime_{kt}$)
   - accumulate the gradient for each output weight ($\delta_{kt} y_{jt}$)
-  - calculate the $\delta$ term for each hidden layer node ($y_{jt}(1 - y_{jt})\sum^K_{k = 1}\delta_{kt} w_{jt}$)
-  - accumulate the gradient for each hidden layer weight ($\delta_{jt} x_{it}$)
+  - calculate the $\delta$ term for each hidden layer node ($y_{jt}(1 - y_{jt})\sum^K_{k = 1}\delta_{kt} w_{jkt}$)
+  - accumulate the gradient for each hidden layer weight ($\delta_{jt} y_{it}$)
 - update all weights and reset accumulated gradients ($w_{ij} = w_{ij} - \epsilon \sum^T_{t = 1}\delta_{jt} x_{it}$)
 
 ### Visualizing backpropagation
@@ -170,7 +170,37 @@ Since we didn't assign an activation function to our output layer node, then $y_
 
 #### Backward pass
 
-...
+On the way back, we first calculate the $\delta$ term for the output node, $\delta_k = y_k - y\prime_k = 0.731 - 0.5 = 0.231$
+
+![backpropagation-visual](readme-images/backprop-visual-6.jpg)
+
+And using the $\delta$ term we calculate the gradient for each weight between $J$ and $K$ layer nodes: $\nabla w_{jk} = \delta_k y_j = 0.231 * 0.731 = 0.168861$
+
+![backpropagation-visual](readme-images/backprop-visual-7.jpg)
+
+We then do the same thing for each hidden layer (just the one in our case): $\delta_j = y_j(1 - y_j) \sum^K_{k = 1} \delta_k w_{jk} = 0.731 * (1 - 0.731) * (0.731 * 0.168861 + 0.731 * 0.168861) \approx 0.048545$
+
+![backpropagation-visual](readme-images/backprop-visual-8.jpg)
+
+And calculate the gradient for each weight between $I$ and $J$ layer nodes: $\nabla w_{ij} = \delta_j y_i = 0.045854 * 1.0 = 0.045854$
+
+![backpropagation-visual](readme-images/backprop-visual-9.jpg)
+
+The last step is to update all of our weights using the calculate gradients. Note that if we had more than one association, then we would first accumulate the gradients for each association and then update the weights. 
+
+$w_{ij} = w_{ij} - \epsilon \nabla w_{ij} = 0.5 - 0.01 * 0.045854 = 0.49954146$
+
+$w_{jk} = w_{jk} - \epsilon \nabla w_{jk} = 0.5 - 0.01 * 0.168861 = 0.49831139$
+
+![backpropagation-visual](readme-images/backprop-visual-10.jpg)
+
+As you can see the weights changed by a very little amount, but if we were run a forward pass again using the updated weights, we should normally get a smaller error than before. Let's check...
+
+We had $y_1 = 0.731$ on our first iteration and we get $y \approx 0.728292$ after the weight changes. 
+
+We had $y_1 - y\prime_1 = 0.231$ and e get $y_2 - y\prime_2 = 0.228292$ after the weight changes. 
+
+We successfully reduced the error! Although these numbers are very small, they are much more representative of a real scenario. Running the algorithm many times over would normally reduce the error down to almost 0 and we'd have completed training our network. 
 
 ## Code example
 
