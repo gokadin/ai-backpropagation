@@ -43,7 +43,7 @@ If we treat the bias as an additional node in a layer with a constant value of <
 
 #### Activation functions
 
-Why do we need an activation function? Without them the output of every node will be linear, making the neural network output a linear function of the inputs. Since the combination of two linear functions is also a linear function, you can't compute more interesting functions without non-linear one. This means that the network will only be able to solve problems that can be solved with linear regression. 
+Why do we need an activation function? Without it the output of every node will be linear, making the neural network output a linear function of the inputs. Since the combination of two linear functions is also a linear function, you can't compute more interesting functions without non-linear ones. This means that the network will only be able to solve problems that can be solved with linear regression. 
 
 If <img src="/tex/36d6e7b3abf42ac72c9766d04e081cf1.svg?invert_in_darkmode&sanitize=true" align=middle width=73.64811134999998pt height=24.657735299999988pt/> then typical activation functions are:
 
@@ -65,7 +65,7 @@ It's using a forward pass to compute the outputs of the network, calculates the 
 - <img src="/tex/22ed3508464d792f01cafea152faf749.svg?invert_in_darkmode&sanitize=true" align=middle width=55.79069924999999pt height=14.15524440000002pt/> are weights of node connections from layer <img src="/tex/21fd4e8eecd6bdf1a4d3d6bd1fb8d733.svg?invert_in_darkmode&sanitize=true" align=middle width=8.515988249999989pt height=22.465723500000017pt/> to <img src="/tex/8eb543f68dac24748e65e2e4c5fc968c.svg?invert_in_darkmode&sanitize=true" align=middle width=10.69635434999999pt height=22.465723500000017pt/> and from layer <img src="/tex/8eb543f68dac24748e65e2e4c5fc968c.svg?invert_in_darkmode&sanitize=true" align=middle width=10.69635434999999pt height=22.465723500000017pt/> to <img src="/tex/d6328eaebbcd5c358f426dbea4bdbf70.svg?invert_in_darkmode&sanitize=true" align=middle width=15.13700594999999pt height=22.465723500000017pt/> respectively.
 - <img src="/tex/4f4f4e395762a3af4575de74c019ebb5.svg?invert_in_darkmode&sanitize=true" align=middle width=5.936097749999991pt height=20.221802699999984pt/> is the current association out of <img src="/tex/2f118ee06d05f3c2d98361d9c30e38ce.svg?invert_in_darkmode&sanitize=true" align=middle width=11.889314249999991pt height=22.465723500000017pt/> associations. 
 
-We will assign the following activation functions to each layer perceptrons for all following examples:
+We will assign the following activation functions to each layer nodes for all following examples:
 
 - input layer -> identity function
 - hidden layer -> sigmoid function
@@ -75,15 +75,15 @@ We will assign the following activation functions to each layer perceptrons for 
 
 During the forward pass, we feed the inputs to the input layer and get the results in the output layer. 
 
-The input to each perceptron in the hidden layer <img src="/tex/37b7efd01cadaf004426bbffacbe789e.svg?invert_in_darkmode&sanitize=true" align=middle width=20.465266799999988pt height=14.15524440000002pt/> is the sum of all perceptron of the previous layer times their corresponding weight:
+The input to each node in the hidden layer <img src="/tex/37b7efd01cadaf004426bbffacbe789e.svg?invert_in_darkmode&sanitize=true" align=middle width=20.465266799999988pt height=14.15524440000002pt/> is the sum of the output from all nodes of the input layer times their corresponding weight:
 
-<p align="center"><img src="/tex/5d70e98d4c0a50ab91845bcaf8f1c148.svg?invert_in_darkmode&sanitize=true" align=middle width=112.04626124999999pt height=47.806078649999996pt/></p>
+<p align="center"><img src="/tex/07be965da2a124c3a996abde43bae6ef.svg?invert_in_darkmode&sanitize=true" align=middle width=110.7107034pt height=47.806078649999996pt/></p>
 
-However, since our hidden layer's activation function for each perceptron is the sigmoid, then their output will be: 
+Since the hidden layer's activation function for each node is the sigmoid, then their output will be: 
 
-<p align="center"><img src="/tex/c8e35d5cf0e85503ce933db89a6ceb9c.svg?invert_in_darkmode&sanitize=true" align=middle width=207.7346304pt height=18.905967299999997pt/></p>
+<p align="center"><img src="/tex/2f47d825a24e00faa091cbb66d6ffd6f.svg?invert_in_darkmode&sanitize=true" align=middle width=180.09521145pt height=34.3600389pt/></p>
 
-In the same manner, the input to the output layer perceptrons are
+In the same manner, the input to the output layer nodes are
 
 <p align="center"><img src="/tex/1ea3438c06b1a112d773b02b7b4fd402.svg?invert_in_darkmode&sanitize=true" align=middle width=115.94097899999998pt height=50.04352485pt/></p>
 
@@ -91,7 +91,7 @@ and their output is the same since we assigned them the identity activation func
 
 <p align="center"><img src="/tex/09afeca56ff80b12106c808e9ac097fb.svg?invert_in_darkmode&sanitize=true" align=middle width=137.9452833pt height=16.438356pt/></p>
 
-Once the inputs have been propagated through the network, we can calculate the error:
+Once the inputs have been propagated through the network, we can calculate the error. If we have multiple associations, we simply sum the error of each association. 
 
 <p align="center"><img src="/tex/6057c698055c0474a4a50b2ad52f8b05.svg?invert_in_darkmode&sanitize=true" align=middle width=226.73802029999996pt height=47.60747145pt/></p>
 
@@ -99,19 +99,21 @@ Once the inputs have been propagated through the network, we can calculate the e
 
 Now that we have the error, we can use it to update each weight of the network by going backwards layer by layer. 
 
-We know from *part 1* that the change of a weight is the negative of that weight's component in the error gradient times the learning rate. For a weight between the last hidden layer and the output layer, we then have
+We know from *part 1* of this series that the change of a weight is the negative of that weight's component in the error gradient times the learning rate. For a weight between the last hidden layer and the output layer, we then have
 
 <p align="center"><img src="/tex/d487ff384e18d4e3e131374a1b020be2.svg?invert_in_darkmode&sanitize=true" align=middle width=123.57475514999999pt height=38.5152603pt/></p>
 
 We can find the error gradient by using the chain rule
 
-<p align="center"><img src="/tex/4cd82dbea08570fbcff0df63b4ed570a.svg?invert_in_darkmode&sanitize=true" align=middle width=383.9243793pt height=38.5152603pt/></p>
+<p align="center"><img src="/tex/6cec7be8c15cfa602950e6c372b3c241.svg?invert_in_darkmode&sanitize=true" align=middle width=852.4350730499999pt height=38.5152603pt/></p>
+
+Therefore the change in weight is <img src="/tex/d81f8b3a4cf5f4f7e0143ae5e2968935.svg?invert_in_darkmode&sanitize=true" align=middle width=125.4901989pt height=22.831056599999986pt/>
+
+For multiple associations, then the change in weight is the sum of each association <img src="/tex/b20396e46c8eadc3df6f07e271b44b7b.svg?invert_in_darkmode&sanitize=true" align=middle width=165.7869972pt height=32.256008400000006pt/>
 
 Similarly, for a weight between hidden layers, in our case between the input layer and our first hidden layer, we have
 
-<p align="center"><img src="/tex/6a7b90b9efb24cc2b6ecdfdadd20791b.svg?invert_in_darkmode&sanitize=true" align=middle width=118.34445975pt height=38.5152603pt/></p>
-
-<p align="center"><img src="/tex/a744eadb2e66bcbb33e45eedf1240f2a.svg?invert_in_darkmode&sanitize=true" align=middle width=464.3724821999999pt height=48.18280005pt/></p>
+<p align="center"><img src="/tex/18265f3ddb6ce1150d17f53abab8b33f.svg?invert_in_darkmode&sanitize=true" align=middle width=586.66213815pt height=48.18280005pt/></p>
 
 Here the calculations are *slightly* more complex. Let's analyze the delta term <img src="/tex/a3ec72e0f05115605b57d81cfab96e7d.svg?invert_in_darkmode&sanitize=true" align=middle width=18.37621829999999pt height=22.831056599999986pt/> and understand how we got there. We start by calculating the partial derivative of <img src="/tex/f8bbbfffa921d3289fa9fdb9a1cf47c4.svg?invert_in_darkmode&sanitize=true" align=middle width=20.48055239999999pt height=14.15524440000002pt/> in respect to the error by using the chain rule
 
