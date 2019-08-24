@@ -1,9 +1,3 @@
----
-typora-root-url: ..\..\..\repos\ai-backpropagation
-
-
----
-
 # Backpropagation algorithm
 
 Backpropagation is a technique used to teach a neural network that has at least one hidden layer. 
