@@ -1,3 +1,9 @@
+---
+typora-root-url: ..\..\..\repos\ai-backpropagation
+
+
+---
+
 # Backpropagation algorithm
 
 Backpropagation is a technique used to teach a neural network that has at least one hidden layer. 
@@ -119,19 +125,17 @@ Similarly, for a weight between hidden layers, in our case between the input lay
 
 $$ \Delta w_{ijt} = -\epsilon \frac{\partial E_t}{\partial w_{ij}} $$
 
-$$ \frac{\partial E_t}{\partial w_{ij}} = \frac{\partial E_t}{\partial x_{jt}} \frac{\partial x_{jt}}{\partial w_{ij}} = \delta_{jt} x_{it} \quad where \quad \delta_{jt} = y_{jt} (1 - y_{jt}) \sum^K_{k = 1} \delta_{kt} w_{jk}  $$
+$$ \frac{\partial E_t}{\partial w_{ij}} = \frac{\partial E_t}{\partial x_{jt}} \frac{\partial x_{jt}}{\partial w_{ij}} = \delta_{jt} y_{it} \quad where \quad \delta_{jt} = y_{jt} (1 - y_{jt}) \sum^K_{k = 1} \delta_{kt} w_{jk}  $$
 
-Here the calculations are *slightly* more complex. Let's analyze the delta term $\delta_{jt}$ and understand how we got there. We start by calculating the partial derivative of $u_{jt}$ in respect to the error by using the chain rule
+Here the calculations are *slightly* more complex. Let's analyze the delta term $\delta_{jt}$ and understand how we got there. We start by calculating the partial derivative of $x_{jt}$ in respect to the error by using the chain rule
 
 $$ \frac{\partial E_t}{\partial x_{jt}} = \frac{\partial E_t}{\partial y_{jt}} \frac{d y_{jt}}{dx_{jt}} $$
 
-$$ \frac{\partial E_t}{\partial y_{jt}} = \sum^K_{k = 1} \frac{\partial E_t}{\partial x_{kt}} \frac{\partial x_{kt}}{\partial y_{jt}} = \sum^K_{k = 1} \delta_{kt} w_{jk} \quad and \quad \frac{dy_{jt}}{dx_{jt}} = f'(y_{jt}) = y_{jt}(1 - y{jt}) $$
+$$ \frac{\partial E_t}{\partial y_{jt}} = \sum^K_{k = 1} \frac{\partial E_t}{\partial x_{kt}} \frac{\partial x_{kt}}{\partial y_{jt}} = \sum^K_{k = 1} \delta_{kt} w_{jk} \quad and \quad \frac{dy_{jt}}{dx_{jt}} = f'(x_{jt}) = f(x_{jt})(1 - f(x_{jt})) = y_{jt}(1 - y{jt}) $$
 
 Remember that our activation function $f$ is the sigmoid function and that its derivative is $f(x)(1 - f(x))$
 
-The change of a weight for $T$ associations is the accumulation of each association
-
-$$ \Delta w_{ij} = -\epsilon \sum^T_{t = 1} \delta_{jt} x_{it} $$
+Again, the change in weight for all associations is the sum of each association $\Delta w_{ij} = -\epsilon \sum^T_{t = 1} \delta_{jt} y_{it}$
 
 ### Algorithm summary
 
