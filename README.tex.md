@@ -43,7 +43,7 @@ $$ x_j = \sum^{I + 1}_{i = 1} x_iw_{ij} $$
 
 #### Activation functions
 
-Why do we need an activation function? Without them the output of every node will be linear, making the neural network output a linear function of the inputs. Since the combination of two linear functions is also a linear function, you can't compute more interesting functions without non-linear one. This means that the network will only be able to solve problems that can be solved with linear regression. 
+Why do we need an activation function? Without it the output of every node will be linear, making the neural network output a linear function of the inputs. Since the combination of two linear functions is also a linear function, you can't compute more interesting functions without non-linear ones. This means that the network will only be able to solve problems that can be solved with linear regression. 
 
 If $x = \sum{\vec{x}\vec{w}}$ then typical activation functions are:
 
@@ -65,7 +65,7 @@ It's using a forward pass to compute the outputs of the network, calculates the 
 - $w_{ij}, w_{jk}$ are weights of node connections from layer $I$ to $J$ and from layer $J$ to $K$ respectively.
 - $t$ is the current association out of $T$ associations. 
 
-We will assign the following activation functions to each layer perceptrons for all following examples:
+We will assign the following activation functions to each layer nodes for all following examples:
 
 - input layer -> identity function
 - hidden layer -> sigmoid function
@@ -75,15 +75,15 @@ We will assign the following activation functions to each layer perceptrons for 
 
 During the forward pass, we feed the inputs to the input layer and get the results in the output layer. 
 
-The input to each perceptron in the hidden layer $x_{jt}$ is the sum of all perceptron of the previous layer times their corresponding weight:
+The input to each node in the hidden layer $x_{jt}$ is the sum of the output from all nodes of the input layer times their corresponding weight:
 
-$$x_{jt} = \sum_{i = 1}^{I} w_{ij}x_{it}$$
+$$x_{jt} = \sum_{i = 1}^{I} w_{ij}y_{it}$$
 
-However, since our hidden layer's activation function for each perceptron is the sigmoid, then their output will be: 
+Since the hidden layer's activation function for each node is the sigmoid, then their output will be: 
 
-$$ y_{jt} = f_j(x_{jt}) = (1 + e^{-x_{jt}})^{-1} $$
+$$ y_{jt} = f_j(x_{jt}) = \frac{1}{1 + e^{-x_{jt}}} $$
 
-In the same manner, the input to the output layer perceptrons are
+In the same manner, the input to the output layer nodes are
 
 $$ x_{kt} = \sum^{J}_{j = 1} w_{jk}y_{jt} $$
 
@@ -91,7 +91,7 @@ and their output is the same since we assigned them the identity activation func
 
 $$ y_{kt} = f_k(x_{kt}) = x_{kt} $$
 
-Once the inputs have been propagated through the network, we can calculate the error:
+Once the inputs have been propagated through the network, we can calculate the error. If we have multiple associations, we simply sum the error of each association. 
 
 $$ E = \sum^{T}_{t = 1} E_t = \frac{1}{2} \sum^{T}_{t = 1} (y_{kt} - y\prime_{kt})^2 $$
 
@@ -99,19 +99,21 @@ $$ E = \sum^{T}_{t = 1} E_t = \frac{1}{2} \sum^{T}_{t = 1} (y_{kt} - y\prime_{kt
 
 Now that we have the error, we can use it to update each weight of the network by going backwards layer by layer. 
 
-We know from *part 1* that the change of a weight is the negative of that weight's component in the error gradient times the learning rate. For a weight between the last hidden layer and the output layer, we then have
+We know from *part 1* of this series that the change of a weight is the negative of that weight's component in the error gradient times the learning rate. For a weight between the last hidden layer and the output layer, we then have
 
 $$ \Delta w_{jkt} = -\epsilon \frac{\partial E_t}{\partial w_{jk}} $$
 
 We can find the error gradient by using the chain rule
 
-$$ \frac{\partial E_t}{\partial w_{jk}} = \frac{\partial E_t}{\partial x_{kt}} \frac{\partial x_{kt}}{\partial w_{jk}} = \delta_{kt} y_{jt} \quad where \quad \delta_{kt} = y_{kt} - y\prime_{kt} $$
+$$ \frac{\partial E_t}{\partial w_{jk}} = \frac{\partial E_t}{\partial x_{kt}} \frac{\partial x_{kt}}{\partial w_{jk}} \\ \frac{\partial E_t}{\partial x_{kt}} = \frac{\partial E_t}{\partial y_{kt}} \frac{\partial y_{kt}}{\partial w_{jk}} = \frac{\partial}{\partial y_{kt}} (\frac{1}{2}(y_{kt} - y\prime_{kt})^2) \frac{\partial}{\partial w_{jk}} (y_{jt}w_{jk}) = y_{kt} - y\prime_{kt} = \delta_{kt} \\ \frac{\partial x_{kt}}{\partial w_{jk}} = \frac{\partial}{\partial w_{jk}}(y_{jt}w_{jk}) = y_{jt} $$
+
+Therefore the change in weight is $\Delta w_{jkt} = -\epsilon \delta_{kt}y_{jt}$
+
+For multiple associations, then the change in weight is the sum of each association $\Delta w_{jk} = -\epsilon \sum^T_{t = 1} \delta_{kt}y_{jt}$
 
 Similarly, for a weight between hidden layers, in our case between the input layer and our first hidden layer, we have
 
-$$ \Delta w_{ijt} = -\epsilon \frac{\partial E_t}{\partial w_{ij}} $$
-
-$$ \frac{\partial E_t}{\partial w_{ij}} = \frac{\partial E_t}{\partial x_{jt}} \frac{\partial x_{jt}}{\partial w_{ij}} = \delta_{jt} x_{it} \quad where \quad \delta_{jt} = y_{jt} (1 - y_{jt}) \sum^K_{k = 1} \delta_{kt} w_{jk} $$
+$$ \Delta w_{ijt} = -\epsilon \frac{\partial E_t}{\partial w_{ij}} \\  \frac{\partial E_t}{\partial w_{ij}} = \frac{\partial E_t}{\partial x_{jt}} \frac{\partial x_{jt}}{\partial w_{ij}} = \delta_{jt} x_{it} \quad where \quad \delta_{jt} = y_{jt} (1 - y_{jt}) \sum^K_{k = 1} \delta_{kt} w_{jk}  $$
 
 Here the calculations are *slightly* more complex. Let's analyze the delta term $\delta_{jt}$ and understand how we got there. We start by calculating the partial derivative of $u_{jt}$ in respect to the error by using the chain rule
 
