@@ -125,7 +125,7 @@ Here the calculations are *slightly* more complex. Let's analyze the delta term 
 
 $$ \frac{\partial E_t}{\partial x_{jt}} = \frac{\partial E_t}{\partial y_{jt}} \frac{d y_{jt}}{dx_{jt}} $$
 
-$$ \frac{\partial E_t}{\partial y_{jt}} = \sum^K_{k = 1} \frac{\partial E_t}{\partial x_{kt}} \frac{\partial x_{kt}}{\partial y_{jt}} = \sum^K_{k = 1} \delta_{kt} w_{jk} \quad and \quad \frac{dy_{jt}}{dx_{jt}} = f'(x_{jt}) = f(x_{jt})(1 - f(x_{jt})) = y_{jt}(1 - y{jt}) $$
+$$ \frac{\partial E_t}{\partial y_{jt}} = \sum^K_{k = 1} \frac{\partial E_t}{\partial x_{kt}} \frac{\partial x_{kt}}{\partial y_{jt}} = \sum^K_{k = 1} \delta_{kt} w_{jk} \quad and \quad \frac{dy_{jt}}{dx_{jt}} = f'(x_{jt}) = f(x_{jt})(1 - f(x_{jt})) = y_{jt}(1 - y_{jt}) $$
 
 Remember that our activation function $f$ is the sigmoid function and that its derivative is $f(x)(1 - f(x))$
 
@@ -140,7 +140,7 @@ Repeat the steps below until the error is about 0​
 - for each association, propagate the network forward and get the outputs
   - calculate the $\delta$ term for each output layer node ($\delta_k = y_{kt} - y\prime_{kt}$)
   - accumulate the gradient for each output weight ($\nabla_{w_{jkt}}E_t = \delta_{kt} y_{jt}$)
-  - calculate the $\delta$ term for each hidden layer node ($\delta_j = y_{jt}(1 - y_{jt})\sum^K_{k = 1}\delta_{kt} w_{jkt}$)
+  - calculate the $\delta$ term for each hidden layer node ($\delta_j = y_{jt}(1 - y_{jt})\sum^K_{k = 1}\delta_{kt} w_{jk}$)
   - accumulate the gradient for each hidden layer weight ($\nabla_{w_{ijt}}E_t = \delta_{jt} y_{it}$)
 - update all weights and reset accumulated gradients ($w = w - \epsilon \nabla E$)
 
@@ -152,13 +152,13 @@ In this example, we'll use actual numbers to follow each step of the network. We
 
 We start by setting all of the nodes of the input layer with the input values; $x_1 = 1.0, x_2 = 1.0$. 
 
-Since the input layer nodes have no activation function, then $y_i = x_i = 1.0$. 
+Since the input layer nodes have the identity activation function, then $y_i = x_i = 1.0$. 
 
 ![backpropagation-visual](readme-images/backprop-visual-1.jpg)
 
 We then propagate the network forward by setting the $J$ layer node inputs ($x_j$) with the sum of all of the previous layer node outputs times their corresponding weights:
 
-$$ x_j = \sum^I_{i = 1} x_i w_{ij} = 1.0 * 0.5 + 1.0 * 0.5 = 1.0 $$
+$$ x_j = \sum^I_{i = 1} y_i w_{ij} = 1.0 * 0.5 + 1.0 * 0.5 = 1.0 $$
 
 ![backpropagation-visual](readme-images/backprop-visual-2.jpg)
 
@@ -170,7 +170,7 @@ We then activate the $J$ layer nodes by passing it's inputs to the sigmoid funct
 
 And we propagate those results to the final layer $x_k = 0.731 * 0.5 + 0.731 * 0.5 = 0.731$
 
-Since we didn't assign an activation function to our output layer node, then $y_k = x_k = 0.731$
+Since the activation function of our output nodes is the identity, then $y_k = x_k = 0.731$
 
 ![backpropagation-visual](readme-images/backprop-visual-5.jpg)
 
@@ -180,33 +180,33 @@ On the way back, we first calculate the $\delta$ term for the output node, $\del
 
 ![backpropagation-visual](readme-images/backprop-visual-6.jpg)
 
-And using the $\delta$ term we calculate the gradient for each weight between $J$ and $K$ layer nodes: $\nabla w_{jk} = \delta_k y_j = 0.231 * 0.731 = 0.168861$
+And using the $\delta$ term we calculate the gradient for each weight between $J$ and $K$ layer nodes: $\nabla_{w_{jk}}E = \delta_k y_j = 0.231 * 0.731 = 0.168861$
 
 ![backpropagation-visual](readme-images/backprop-visual-7.jpg)
 
-We then do the same thing for each hidden layer (just the one in our case): $\delta_j = y_j(1 - y_j) \sum^K_{k = 1} \delta_k w_{jk} = 0.731 * (1 - 0.731) * (0.731 * 0.168861 + 0.731 * 0.168861) \approx 0.048545$
+We then do the same thing for each hidden layer (just the one in our case): $\delta_j = y_j(1 - y_j) \sum^K_{k = 1} \delta_k w_{jk} = 0.731 * (1 - 0.731) * (0.5 * 0.231) \approx 0.0227$
 
 ![backpropagation-visual](readme-images/backprop-visual-8.jpg)
 
-And calculate the gradient for each weight between $I$ and $J$ layer nodes: $\nabla w_{ij} = \delta_j y_i = 0.045854 * 1.0 = 0.045854$
+And calculate the gradient for each weight between $I$ and $J$ layer nodes: $\nabla_{w_{ij}}E = \delta_j y_i = 0.0227 * 1.0 = 0.0227$
 
 ![backpropagation-visual](readme-images/backprop-visual-9.jpg)
 
 The last step is to update all of our weights using the calculate gradients. Note that if we had more than one association, then we would first accumulate the gradients for each association and then update the weights. 
 
-$w_{ij} = w_{ij} - \epsilon \nabla w_{ij}E = 0.5 - 0.01 * 0.045854 = 0.49954146$
+$w_{ij} = w_{ij} - \epsilon \nabla_{w_{ij}}E = 0.5 - 0.01 * 0.0227 = 0.499773$
 
-$w_{jk} = w_{jk} - \epsilon \nabla w_{jk}E = 0.5 - 0.01 * 0.168861 = 0.49831139$
+$w_{jk} = w_{jk} - \epsilon \nabla_{w_{jk}}E = 0.5 - 0.01 * 0.168861 = 0.49831139$
 
 ![backpropagation-visual](readme-images/backprop-visual-10.jpg)
 
 As you can see the weights changed by a very little amount, but if we were run a forward pass again using the updated weights, we should normally get a smaller error than before. Let's check...
 
-We had $y_1 = 0.731$ on our first iteration and we get $y \approx 0.728292$ after the weight changes. 
+We had $y_1 = 0.731$ on our first iteration and we get $y \approx 0.7285$ after the weight changes. 
 
-We had $y_1 - y\prime_1 = 0.231$ and we get $y_2 - y\prime_2 = 0.228292$ after the weight changes. 
+We had $y_1 - y\prime_1 = 0.231$ and we get $y_2 - y\prime_2 = 0.2285$ after the weight changes. 
 
-We successfully reduced the error! Although these numbers are very small, they are much more representative of a real scenario. Running the algorithm many times over would normally reduce the error down to almost 0 and we'd have completed training our network. 
+We successfully reduced the error! Although these numbers are very small, they are much more representative of a real scenario. Running the algorithm many times over would normally reduce the error down to almost 0 and we'd have completed training the network. 
 
 ## Code example
 
