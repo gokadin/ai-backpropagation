@@ -105,7 +105,11 @@ We know from *part 1* of this series that the change of a weight is the negative
 
 We can find the error gradient by using the chain rule
 
-<p align="center"><img src="/tex/6cec7be8c15cfa602950e6c372b3c241.svg?invert_in_darkmode&sanitize=true" align=middle width=852.4350730499999pt height=38.5152603pt/></p>
+<p align="center"><img src="/tex/50aaad9a03ab5059fad2837191142d57.svg?invert_in_darkmode&sanitize=true" align=middle width=133.0997481pt height=38.5152603pt/></p>
+
+<p align="center"><img src="/tex/22fa39eb18dcbb27234f6ddb1560153d.svg?invert_in_darkmode&sanitize=true" align=middle width=528.4237711499999pt height=38.5152603pt/></p>
+
+<p align="center"><img src="/tex/c8c7bbc7e2cdcd0d835a05b2966b97e3.svg?invert_in_darkmode&sanitize=true" align=middle width=198.7833837pt height=38.5152603pt/></p>
 
 Therefore the change in weight is <img src="/tex/d81f8b3a4cf5f4f7e0143ae5e2968935.svg?invert_in_darkmode&sanitize=true" align=middle width=125.4901989pt height=22.831056599999986pt/>
 
@@ -113,7 +117,9 @@ For multiple associations, then the change in weight is the sum of each associat
 
 Similarly, for a weight between hidden layers, in our case between the input layer and our first hidden layer, we have
 
-<p align="center"><img src="/tex/18265f3ddb6ce1150d17f53abab8b33f.svg?invert_in_darkmode&sanitize=true" align=middle width=586.66213815pt height=48.18280005pt/></p>
+<p align="center"><img src="/tex/6a7b90b9efb24cc2b6ecdfdadd20791b.svg?invert_in_darkmode&sanitize=true" align=middle width=118.34445975pt height=38.5152603pt/></p>
+
+<p align="center"><img src="/tex/d478eb5c5b6d1a51fa8e0d2cc6a6b371.svg?invert_in_darkmode&sanitize=true" align=middle width=464.3724821999999pt height=48.18280005pt/></p>
 
 Here the calculations are *slightly* more complex. Let's analyze the delta term <img src="/tex/a3ec72e0f05115605b57d81cfab96e7d.svg?invert_in_darkmode&sanitize=true" align=middle width=18.37621829999999pt height=22.831056599999986pt/> and understand how we got there. We start by calculating the partial derivative of <img src="/tex/f8bbbfffa921d3289fa9fdb9a1cf47c4.svg?invert_in_darkmode&sanitize=true" align=middle width=20.48055239999999pt height=14.15524440000002pt/> in respect to the error by using the chain rule
 
