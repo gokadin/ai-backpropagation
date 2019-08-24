@@ -105,7 +105,11 @@ $$ \Delta w_{jkt} = -\epsilon \frac{\partial E_t}{\partial w_{jk}} $$
 
 We can find the error gradient by using the chain rule
 
-$$ \frac{\partial E_t}{\partial w_{jk}} = \frac{\partial E_t}{\partial x_{kt}} \frac{\partial x_{kt}}{\partial w_{jk}} \\ \frac{\partial E_t}{\partial x_{kt}} = \frac{\partial E_t}{\partial y_{kt}} \frac{\partial y_{kt}}{\partial w_{jk}} = \frac{\partial}{\partial y_{kt}} (\frac{1}{2}(y_{kt} - y\prime_{kt})^2) \frac{\partial}{\partial w_{jk}} (y_{jt}w_{jk}) = y_{kt} - y\prime_{kt} = \delta_{kt} \\ \frac{\partial x_{kt}}{\partial w_{jk}} = \frac{\partial}{\partial w_{jk}}(y_{jt}w_{jk}) = y_{jt} $$
+$$ \frac{\partial E_t}{\partial w_{jk}} = \frac{\partial E_t}{\partial x_{kt}} \frac{\partial x_{kt}}{\partial w_{jk}} $$
+
+$$ \frac{\partial E_t}{\partial x_{kt}} = \frac{\partial E_t}{\partial y_{kt}} \frac{\partial y_{kt}}{\partial w_{jk}} = \frac{\partial}{\partial y_{kt}} (\frac{1}{2}(y_{kt} - y\prime_{kt})^2) \frac{\partial}{\partial w_{jk}} (y_{jt}w_{jk}) = y_{kt} - y\prime_{kt} = \delta_{kt} $$
+
+$$ \frac{\partial x_{kt}}{\partial w_{jk}} = \frac{\partial}{\partial w_{jk}}(y_{jt}w_{jk}) = y_{jt} $$
 
 Therefore the change in weight is $\Delta w_{jkt} = -\epsilon \delta_{kt}y_{jt}$
 
@@ -113,7 +117,9 @@ For multiple associations, then the change in weight is the sum of each associat
 
 Similarly, for a weight between hidden layers, in our case between the input layer and our first hidden layer, we have
 
-$$ \Delta w_{ijt} = -\epsilon \frac{\partial E_t}{\partial w_{ij}} \\  \frac{\partial E_t}{\partial w_{ij}} = \frac{\partial E_t}{\partial x_{jt}} \frac{\partial x_{jt}}{\partial w_{ij}} = \delta_{jt} x_{it} \quad where \quad \delta_{jt} = y_{jt} (1 - y_{jt}) \sum^K_{k = 1} \delta_{kt} w_{jk}  $$
+$$ \Delta w_{ijt} = -\epsilon \frac{\partial E_t}{\partial w_{ij}} $$
+
+$$ \frac{\partial E_t}{\partial w_{ij}} = \frac{\partial E_t}{\partial x_{jt}} \frac{\partial x_{jt}}{\partial w_{ij}} = \delta_{jt} x_{it} \quad where \quad \delta_{jt} = y_{jt} (1 - y_{jt}) \sum^K_{k = 1} \delta_{kt} w_{jk}  $$
 
 Here the calculations are *slightly* more complex. Let's analyze the delta term $\delta_{jt}$ and understand how we got there. We start by calculating the partial derivative of $u_{jt}$ in respect to the error by using the chain rule
 
