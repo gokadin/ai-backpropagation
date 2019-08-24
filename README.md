@@ -1,3 +1,9 @@
+---
+typora-root-url: ..\..\..\repos\ai-backpropagation
+
+
+---
+
 # Backpropagation algorithm
 
 Backpropagation is a technique used to teach a neural network that has at least one hidden layer. 
@@ -119,19 +125,17 @@ Similarly, for a weight between hidden layers, in our case between the input lay
 
 <p align="center"><img src="/tex/6a7b90b9efb24cc2b6ecdfdadd20791b.svg?invert_in_darkmode&sanitize=true" align=middle width=118.34445975pt height=38.5152603pt/></p>
 
-<p align="center"><img src="/tex/d478eb5c5b6d1a51fa8e0d2cc6a6b371.svg?invert_in_darkmode&sanitize=true" align=middle width=464.3724821999999pt height=48.18280005pt/></p>
+<p align="center"><img src="/tex/7dbae9c10713bb224a031ab7e6a08eb2.svg?invert_in_darkmode&sanitize=true" align=middle width=463.036926pt height=48.18280005pt/></p>
 
-Here the calculations are *slightly* more complex. Let's analyze the delta term <img src="/tex/a3ec72e0f05115605b57d81cfab96e7d.svg?invert_in_darkmode&sanitize=true" align=middle width=18.37621829999999pt height=22.831056599999986pt/> and understand how we got there. We start by calculating the partial derivative of <img src="/tex/f8bbbfffa921d3289fa9fdb9a1cf47c4.svg?invert_in_darkmode&sanitize=true" align=middle width=20.48055239999999pt height=14.15524440000002pt/> in respect to the error by using the chain rule
+Here the calculations are *slightly* more complex. Let's analyze the delta term <img src="/tex/a3ec72e0f05115605b57d81cfab96e7d.svg?invert_in_darkmode&sanitize=true" align=middle width=18.37621829999999pt height=22.831056599999986pt/> and understand how we got there. We start by calculating the partial derivative of <img src="/tex/37b7efd01cadaf004426bbffacbe789e.svg?invert_in_darkmode&sanitize=true" align=middle width=20.465266799999988pt height=14.15524440000002pt/> in respect to the error by using the chain rule
 
 <p align="center"><img src="/tex/27d8e79faef062f9f5ee979318bc8d9f.svg?invert_in_darkmode&sanitize=true" align=middle width=120.17064509999999pt height=38.5152603pt/></p>
 
-<p align="center"><img src="/tex/45a199a55d24da3882cf776b427f046a.svg?invert_in_darkmode&sanitize=true" align=middle width=515.20994085pt height=48.18280005pt/></p>
+<p align="center"><img src="/tex/394bc764948136af6c348c8e31ba030b.svg?invert_in_darkmode&sanitize=true" align=middle width=667.33897725pt height=48.18280005pt/></p>
 
 Remember that our activation function <img src="/tex/190083ef7a1625fbc75f243cffb9c96d.svg?invert_in_darkmode&sanitize=true" align=middle width=9.81741584999999pt height=22.831056599999986pt/> is the sigmoid function and that its derivative is <img src="/tex/63905ec601ca88b13ff9a43d55aee30f.svg?invert_in_darkmode&sanitize=true" align=middle width=105.09150299999999pt height=24.65753399999998pt/>
 
-The change of a weight for <img src="/tex/2f118ee06d05f3c2d98361d9c30e38ce.svg?invert_in_darkmode&sanitize=true" align=middle width=11.889314249999991pt height=22.465723500000017pt/> associations is the accumulation of each association
-
-<p align="center"><img src="/tex/f8986238597442b770c458c54abaccdc.svg?invert_in_darkmode&sanitize=true" align=middle width=145.85336865pt height=47.60747145pt/></p>
+Again, the change in weight for all associations is the sum of each association <img src="/tex/581a271e7b50ac8852adfb8a699924ef.svg?invert_in_darkmode&sanitize=true" align=middle width=160.55672159999997pt height=32.256008400000006pt/>
 
 ### Algorithm summary
 
