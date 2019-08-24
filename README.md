@@ -125,7 +125,7 @@ Here the calculations are *slightly* more complex. Let's analyze the delta term 
 
 <p align="center"><img src="/tex/27d8e79faef062f9f5ee979318bc8d9f.svg?invert_in_darkmode&sanitize=true" align=middle width=120.17064509999999pt height=38.5152603pt/></p>
 
-<p align="center"><img src="/tex/394bc764948136af6c348c8e31ba030b.svg?invert_in_darkmode&sanitize=true" align=middle width=667.33897725pt height=48.18280005pt/></p>
+<p align="center"><img src="/tex/eff0fd6f45f7e54f8cd9a857f5a09fe0.svg?invert_in_darkmode&sanitize=true" align=middle width=664.99490145pt height=48.18280005pt/></p>
 
 Remember that our activation function <img src="/tex/190083ef7a1625fbc75f243cffb9c96d.svg?invert_in_darkmode&sanitize=true" align=middle width=9.81741584999999pt height=22.831056599999986pt/> is the sigmoid function and that its derivative is <img src="/tex/63905ec601ca88b13ff9a43d55aee30f.svg?invert_in_darkmode&sanitize=true" align=middle width=105.09150299999999pt height=24.65753399999998pt/>
 
@@ -140,7 +140,7 @@ Repeat the steps below until the error is about 0​
 - for each association, propagate the network forward and get the outputs
   - calculate the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term for each output layer node (<img src="/tex/1d97e78591ccde2409d0caec79b07c35.svg?invert_in_darkmode&sanitize=true" align=middle width=103.91742074999999pt height=22.831056599999986pt/>)
   - accumulate the gradient for each output weight (<img src="/tex/edccb26d12f0480f8c7355b0daba34ab.svg?invert_in_darkmode&sanitize=true" align=middle width=120.49785659999999pt height=22.831056599999986pt/>)
-  - calculate the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term for each hidden layer node (<img src="/tex/c0162beede82157cf166e9042561e60e.svg?invert_in_darkmode&sanitize=true" align=middle width=215.17631189999994pt height=32.256008400000006pt/>)
+  - calculate the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term for each hidden layer node (<img src="/tex/859edbc85ed6880acab23191c1061eba.svg?invert_in_darkmode&sanitize=true" align=middle width=210.21051974999997pt height=32.256008400000006pt/>)
   - accumulate the gradient for each hidden layer weight (<img src="/tex/afab97b9eca9c4a3f27445364705c195.svg?invert_in_darkmode&sanitize=true" align=middle width=115.90401075pt height=22.831056599999986pt/>)
 - update all weights and reset accumulated gradients (<img src="/tex/312098b63ae09679d41449dd93350d67.svg?invert_in_darkmode&sanitize=true" align=middle width=99.88377299999999pt height=22.465723500000017pt/>)
 
@@ -152,13 +152,13 @@ In this example, we'll use actual numbers to follow each step of the network. We
 
 We start by setting all of the nodes of the input layer with the input values; <img src="/tex/902d9d457b5dd887bab6109f2939c439.svg?invert_in_darkmode&sanitize=true" align=middle width=126.68932649999998pt height=21.18721440000001pt/>. 
 
-Since the input layer nodes have no activation function, then <img src="/tex/0a353c7c5dda5a3590dfdf659d666296.svg?invert_in_darkmode&sanitize=true" align=middle width=93.23991599999998pt height=21.18721440000001pt/>. 
+Since the input layer nodes have the identity activation function, then <img src="/tex/0a353c7c5dda5a3590dfdf659d666296.svg?invert_in_darkmode&sanitize=true" align=middle width=93.23991599999998pt height=21.18721440000001pt/>. 
 
 ![backpropagation-visual](readme-images/backprop-visual-1.jpg)
 
 We then propagate the network forward by setting the <img src="/tex/8eb543f68dac24748e65e2e4c5fc968c.svg?invert_in_darkmode&sanitize=true" align=middle width=10.69635434999999pt height=22.465723500000017pt/> layer node inputs (<img src="/tex/4d8443b72a1de913b4a3995119296c90.svg?invert_in_darkmode&sanitize=true" align=middle width=15.499497749999989pt height=14.15524440000002pt/>) with the sum of all of the previous layer node outputs times their corresponding weights:
 
-<p align="center"><img src="/tex/b8b64f33f599e5f31d0d1ee4aa8d7fd2.svg?invert_in_darkmode&sanitize=true" align=middle width=302.93619674999997pt height=47.806078649999996pt/></p>
+<p align="center"><img src="/tex/8a039eb62a99a899cb71b2d78dbcfbad.svg?invert_in_darkmode&sanitize=true" align=middle width=301.6006389pt height=47.806078649999996pt/></p>
 
 ![backpropagation-visual](readme-images/backprop-visual-2.jpg)
 
@@ -170,7 +170,7 @@ We then activate the <img src="/tex/8eb543f68dac24748e65e2e4c5fc968c.svg?invert_
 
 And we propagate those results to the final layer <img src="/tex/268ed1352dff47b71e61b3328c3edce3.svg?invert_in_darkmode&sanitize=true" align=middle width=266.79778949999996pt height=21.18721440000001pt/>
 
-Since we didn't assign an activation function to our output layer node, then <img src="/tex/e1f7e2cd426e2ece1aad8a07e24f10d7.svg?invert_in_darkmode&sanitize=true" align=middle width=114.9086301pt height=21.18721440000001pt/>
+Since the activation function of our output nodes is the identity, then <img src="/tex/e1f7e2cd426e2ece1aad8a07e24f10d7.svg?invert_in_darkmode&sanitize=true" align=middle width=114.9086301pt height=21.18721440000001pt/>
 
 ![backpropagation-visual](readme-images/backprop-visual-5.jpg)
 
@@ -180,33 +180,33 @@ On the way back, we first calculate the <img src="/tex/38f1e2a089e53d5c990a82f28
 
 ![backpropagation-visual](readme-images/backprop-visual-6.jpg)
 
-And using the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term we calculate the gradient for each weight between <img src="/tex/8eb543f68dac24748e65e2e4c5fc968c.svg?invert_in_darkmode&sanitize=true" align=middle width=10.69635434999999pt height=22.465723500000017pt/> and <img src="/tex/d6328eaebbcd5c358f426dbea4bdbf70.svg?invert_in_darkmode&sanitize=true" align=middle width=15.13700594999999pt height=22.465723500000017pt/> layer nodes: <img src="/tex/7c8a5cedf3d6bc7b8e6fe760613a03b8.svg?invert_in_darkmode&sanitize=true" align=middle width=288.30400004999996pt height=22.831056599999986pt/>
+And using the <img src="/tex/38f1e2a089e53d5c990a82f284948953.svg?invert_in_darkmode&sanitize=true" align=middle width=7.928075099999989pt height=22.831056599999986pt/> term we calculate the gradient for each weight between <img src="/tex/8eb543f68dac24748e65e2e4c5fc968c.svg?invert_in_darkmode&sanitize=true" align=middle width=10.69635434999999pt height=22.465723500000017pt/> and <img src="/tex/d6328eaebbcd5c358f426dbea4bdbf70.svg?invert_in_darkmode&sanitize=true" align=middle width=15.13700594999999pt height=22.465723500000017pt/> layer nodes: <img src="/tex/257ab95b400ee44ce8266f60346e7e6e.svg?invert_in_darkmode&sanitize=true" align=middle width=298.26217904999993pt height=22.831056599999986pt/>
 
 ![backpropagation-visual](readme-images/backprop-visual-7.jpg)
 
-We then do the same thing for each hidden layer (just the one in our case): <img src="/tex/7dd64c125a608844d8c312950bf44045.svg?invert_in_darkmode&sanitize=true" align=middle width=667.39760505pt height=32.256008400000006pt/>
+We then do the same thing for each hidden layer (just the one in our case): <img src="/tex/fec1a2a50e81fcf7e37f7ce4b14b0f81.svg?invert_in_darkmode&sanitize=true" align=middle width=519.42265155pt height=32.256008400000006pt/>
 
 ![backpropagation-visual](readme-images/backprop-visual-8.jpg)
 
-And calculate the gradient for each weight between <img src="/tex/21fd4e8eecd6bdf1a4d3d6bd1fb8d733.svg?invert_in_darkmode&sanitize=true" align=middle width=8.515988249999989pt height=22.465723500000017pt/> and <img src="/tex/8eb543f68dac24748e65e2e4c5fc968c.svg?invert_in_darkmode&sanitize=true" align=middle width=10.69635434999999pt height=22.465723500000017pt/> layer nodes: <img src="/tex/18a461f126c5140c2e3cb5cddab946e9.svg?invert_in_darkmode&sanitize=true" align=middle width=291.29291564999994pt height=22.831056599999986pt/>
+And calculate the gradient for each weight between <img src="/tex/21fd4e8eecd6bdf1a4d3d6bd1fb8d733.svg?invert_in_darkmode&sanitize=true" align=middle width=8.515988249999989pt height=22.465723500000017pt/> and <img src="/tex/8eb543f68dac24748e65e2e4c5fc968c.svg?invert_in_darkmode&sanitize=true" align=middle width=10.69635434999999pt height=22.465723500000017pt/> layer nodes: <img src="/tex/fe465b82a86e57a52edf7660f32d5b48.svg?invert_in_darkmode&sanitize=true" align=middle width=269.0106853499999pt height=22.831056599999986pt/>
 
 ![backpropagation-visual](readme-images/backprop-visual-9.jpg)
 
 The last step is to update all of our weights using the calculate gradients. Note that if we had more than one association, then we would first accumulate the gradients for each association and then update the weights. 
 
-<img src="/tex/baba6c7acdeb81dd49a08ab652816183.svg?invert_in_darkmode&sanitize=true" align=middle width=415.8191466pt height=22.465723500000017pt/>
+<img src="/tex/5dc00bd4156a62dec5a7be26af97ee49.svg?invert_in_darkmode&sanitize=true" align=middle width=380.45473949999996pt height=22.465723500000017pt/>
 
-<img src="/tex/b3d95619b1cf7580dde39b955cbcf7c9.svg?invert_in_darkmode&sanitize=true" align=middle width=423.66458969999996pt height=22.465723500000017pt/>
+<img src="/tex/4031169763e69598571fde36abac3b81.svg?invert_in_darkmode&sanitize=true" align=middle width=420.54059025pt height=22.465723500000017pt/>
 
 ![backpropagation-visual](readme-images/backprop-visual-10.jpg)
 
 As you can see the weights changed by a very little amount, but if we were run a forward pass again using the updated weights, we should normally get a smaller error than before. Let's check...
 
-We had <img src="/tex/371bbbdd40fff829396823dfeddfb94f.svg?invert_in_darkmode&sanitize=true" align=middle width=74.79458414999999pt height=21.18721440000001pt/> on our first iteration and we get <img src="/tex/a4395fb18072a7710c2b1c84536b085a.svg?invert_in_darkmode&sanitize=true" align=middle width=92.66752769999998pt height=21.18721440000001pt/> after the weight changes. 
+We had <img src="/tex/371bbbdd40fff829396823dfeddfb94f.svg?invert_in_darkmode&sanitize=true" align=middle width=74.79458414999999pt height=21.18721440000001pt/> on our first iteration and we get <img src="/tex/78f5b4c693bab0ef0bc7749c6ecb47d9.svg?invert_in_darkmode&sanitize=true" align=middle width=76.22910734999999pt height=21.18721440000001pt/> after the weight changes. 
 
-We had <img src="/tex/269cef8bad3668ba4ee6e04ccfab9729.svg?invert_in_darkmode&sanitize=true" align=middle width=115.42998224999998pt height=21.18721440000001pt/> and we get <img src="/tex/3768a90428bdba0b51a626d7c193cd96.svg?invert_in_darkmode&sanitize=true" align=middle width=140.08761029999997pt height=21.18721440000001pt/> after the weight changes. 
+We had <img src="/tex/269cef8bad3668ba4ee6e04ccfab9729.svg?invert_in_darkmode&sanitize=true" align=middle width=115.42998224999998pt height=21.18721440000001pt/> and we get <img src="/tex/593fbfb74571879c8dbbc03ecff98cc8.svg?invert_in_darkmode&sanitize=true" align=middle width=123.64919159999998pt height=21.18721440000001pt/> after the weight changes. 
 
-We successfully reduced the error! Although these numbers are very small, they are much more representative of a real scenario. Running the algorithm many times over would normally reduce the error down to almost 0 and we'd have completed training our network. 
+We successfully reduced the error! Although these numbers are very small, they are much more representative of a real scenario. Running the algorithm many times over would normally reduce the error down to almost 0 and we'd have completed training the network. 
 
 ## Code example
 
