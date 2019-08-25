@@ -31,9 +31,9 @@ Backpropagation is a technique used to teach a neural network that has at least 
 
 A perceptron is a processing unit that takes an input <img src="/tex/332cc365a4987aacce0ead01b8bdcc0b.svg?invert_in_darkmode&sanitize=true" align=middle width=9.39498779999999pt height=14.15524440000002pt/>, transforms it using an activation function <img src="/tex/190083ef7a1625fbc75f243cffb9c96d.svg?invert_in_darkmode&sanitize=true" align=middle width=9.81741584999999pt height=22.831056599999986pt/> and outputs the result <img src="/tex/deceeaf6940a8c7a5a02373728002b0f.svg?invert_in_darkmode&sanitize=true" align=middle width=8.649225749999989pt height=14.15524440000002pt/>. 
 
-Within a neural network, its input is the sum of the previous layer node outputs times their corresponding weight, plus the previous layer bias unit times its weight:
+Within a neural network, its input is the sum of the previous layer node outputs times their corresponding weight, minus the previous layer bias unit times its weight:
 
-<p align="center"><img src="/tex/364a0eb6624fe587c128c4de95f94f58.svg?invert_in_darkmode&sanitize=true" align=middle width=158.0792961pt height=47.806078649999996pt/></p>
+<p align="center"><img src="/tex/30e928c3f095655e194566fa8f685f4c.svg?invert_in_darkmode&sanitize=true" align=middle width=158.0792961pt height=47.806078649999996pt/></p>
 
 If we treat the bias as an additional node in a layer with a constant value of <img src="/tex/e11a8cfcf953c683196d7a48677b2277.svg?invert_in_darkmode&sanitize=true" align=middle width=21.00464354999999pt height=21.18721440000001pt/>, then we can simplify the equation:
 
@@ -107,7 +107,7 @@ We can find the error gradient by using the chain rule
 
 <p align="center"><img src="/tex/50aaad9a03ab5059fad2837191142d57.svg?invert_in_darkmode&sanitize=true" align=middle width=133.0997481pt height=38.5152603pt/></p>
 
-<p align="center"><img src="/tex/55960b7e40e7640dc9d85e3b833ddf21.svg?invert_in_darkmode&sanitize=true" align=middle width=548.0582645999999pt height=39.814869599999994pt/></p>
+<p align="center"><img src="/tex/75f8d498980aed3d609c85e88f33e328.svg?invert_in_darkmode&sanitize=true" align=middle width=517.5699507pt height=39.452455349999994pt/></p>
 
 <p align="center"><img src="/tex/c8c7bbc7e2cdcd0d835a05b2966b97e3.svg?invert_in_darkmode&sanitize=true" align=middle width=198.7833837pt height=38.5152603pt/></p>
 
