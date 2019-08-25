@@ -192,7 +192,7 @@ And calculate the gradient for each weight between <img src="/tex/21fd4e8eecd6bd
 
 ![backpropagation-visual](readme-images/backprop-visual-9.jpg)
 
-The last step is to update all of our weights using the calculate gradients. Note that if we had more than one association, then we would first accumulate the gradients for each association and then update the weights. 
+The last step is to update all of our weights using the calculated gradients. Note that if we had more than one association, then we would first accumulate the gradients for each association and then update the weights. 
 
 <img src="/tex/5dc00bd4156a62dec5a7be26af97ee49.svg?invert_in_darkmode&sanitize=true" align=middle width=380.45473949999996pt height=22.465723500000017pt/>
 
@@ -202,7 +202,7 @@ The last step is to update all of our weights using the calculate gradients. Not
 
 As you can see the weights changed by a very little amount, but if we were run a forward pass again using the updated weights, we should normally get a smaller error than before. Let's check...
 
-We had <img src="/tex/371bbbdd40fff829396823dfeddfb94f.svg?invert_in_darkmode&sanitize=true" align=middle width=74.79458414999999pt height=21.18721440000001pt/> on our first iteration and we get <img src="/tex/78f5b4c693bab0ef0bc7749c6ecb47d9.svg?invert_in_darkmode&sanitize=true" align=middle width=76.22910734999999pt height=21.18721440000001pt/> after the weight changes. 
+We had <img src="/tex/371bbbdd40fff829396823dfeddfb94f.svg?invert_in_darkmode&sanitize=true" align=middle width=74.79458414999999pt height=21.18721440000001pt/> on our first iteration and we get <img src="/tex/67b4fcc663503c4120b566285a7b4605.svg?invert_in_darkmode&sanitize=true" align=middle width=83.01379349999999pt height=21.18721440000001pt/> after the weight changes. 
 
 We had <img src="/tex/269cef8bad3668ba4ee6e04ccfab9729.svg?invert_in_darkmode&sanitize=true" align=middle width=115.42998224999998pt height=21.18721440000001pt/> and we get <img src="/tex/593fbfb74571879c8dbbc03ecff98cc8.svg?invert_in_darkmode&sanitize=true" align=middle width=123.64919159999998pt height=21.18721440000001pt/> after the weight changes. 
 
