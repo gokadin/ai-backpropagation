@@ -31,9 +31,9 @@ Backpropagation is a technique used to teach a neural network that has at least 
 
 A perceptron is a processing unit that takes an input $x$, transforms it using an activation function $f$ and outputs the result $y$. 
 
-Within a neural network, its input is the sum of the previous layer node outputs times their corresponding weight, plus the previous layer bias unit times its weight:
+Within a neural network, its input is the sum of the previous layer node outputs times their corresponding weight, minus the previous layer bias unit times its weight:
 
-$$ x_j = \sum^I_{i = 1} x_iw_{ij} + b_iw_{ij} $$
+$$ x_j = \sum^I_{i = 1} x_iw_{ij} - b_iw_{ij} $$
 
 If we treat the bias as an additional node in a layer with a constant value of $-1$, then we can simplify the equation:
 
@@ -107,7 +107,7 @@ We can find the error gradient by using the chain rule
 
 $$ \frac{\partial E_t}{\partial w_{jk}} = \frac{\partial E_t}{\partial x_{kt}} \frac{\partial x_{kt}}{\partial w_{jk}} $$
 
-$$ \frac{\partial E_t}{\partial x_{kt}} = \frac{\partial E_t}{\partial y_{kt}} \frac{\partial y_{kt}}{\partial w_{jk}} = \frac{\partial}{\partial y_{kt}} \left(\frac{1}{2}(y_{kt} - y\prime_{kt})^2\right) \frac{\partial}{\partial w_{jk}} \left(y_{jt}w_{jk}\right) = y_{kt} - y\prime_{kt} = \delta_{kt} $$
+$$ \frac{\partial E_t}{\partial x_{kt}} = \frac{\partial E_t}{\partial y_{kt}} \frac{\partial y_{kt}}{\partial x_{kt}} = \frac{\partial}{\partial y_{kt}} \left(\frac{1}{2}(y_{kt} - y\prime_{kt})^2\right) \frac{\partial}{\partial x_{kt}} \left(x_{kt}\right) = y_{kt} - y\prime_{kt} = \delta_{kt} $$
 
 $$ \frac{\partial x_{kt}}{\partial w_{jk}} = \frac{\partial}{\partial w_{jk}}(y_{jt}w_{jk}) = y_{jt} $$
 
