@@ -192,7 +192,7 @@ And calculate the gradient for each weight between $I$ and $J$ layer nodes: $\na
 
 ![backpropagation-visual](readme-images/backprop-visual-9.jpg)
 
-The last step is to update all of our weights using the calculate gradients. Note that if we had more than one association, then we would first accumulate the gradients for each association and then update the weights. 
+The last step is to update all of our weights using the calculated gradients. Note that if we had more than one association, then we would first accumulate the gradients for each association and then update the weights. 
 
 $w_{ij} = w_{ij} - \epsilon \nabla_{w_{ij}}E = 0.5 - 0.01 * 0.0227 = 0.499773$
 
@@ -202,7 +202,7 @@ $w_{jk} = w_{jk} - \epsilon \nabla_{w_{jk}}E = 0.5 - 0.01 * 0.168861 = 0.4983113
 
 As you can see the weights changed by a very little amount, but if we were run a forward pass again using the updated weights, we should normally get a smaller error than before. Let's check...
 
-We had $y_1 = 0.731$ on our first iteration and we get $y \approx 0.7285$ after the weight changes. 
+We had $y_1 = 0.731$ on our first iteration and we get $y_2 \approx 0.7285$ after the weight changes. 
 
 We had $y_1 - y\prime_1 = 0.231$ and we get $y_2 - y\prime_2 = 0.2285$ after the weight changes. 
 
