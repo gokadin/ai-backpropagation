@@ -93,7 +93,7 @@ $$ y_{kt} = f_k(x_{kt}) = x_{kt} $$
 
 Once the inputs have been propagated through the network, we can calculate the error. If we have multiple associations, we simply sum the error of each association. 
 
-$$ E = \sum^{T}_{t = 1} E_t = \frac{1}{2t} \sum^{T}_{t = 1} (y_{kt} - y\prime_{kt})^2 $$
+$$ E = \sum^{T}_{t = 1} E_t = \frac{1}{2T} \sum^{T}_{t = 1} (y_{kt} - y\prime_{kt})^2 $$
 
 #### The backward pass
 
