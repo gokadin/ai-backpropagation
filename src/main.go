@@ -73,7 +73,7 @@ func learn(network *layerCollection, inputs [][]float64, expectedOutputs [][]flo
 			err = math.Pow(err, 2)
 		}
 
-		err /= 2
+		err /= float64(len(network.outputLayer().Nodes()))
 		fmt.Println("error:", err)
 		if err < 0.0001 {
 			learn = false

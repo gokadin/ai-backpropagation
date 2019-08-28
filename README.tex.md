@@ -33,7 +33,7 @@ A perceptron is a processing unit that takes an input $x$, transforms it using a
 
 Within a neural network, its input is the sum of the previous layer node outputs times their corresponding weight, minus the previous layer bias unit times its weight:
 
-$$ x_j = \sum^I_{i = 1} x_iw_{ij} - b_iw_{ij} $$
+$$ x_j = \sum^I_{i = 1} x_iw_{ij} + b_i $$
 
 If we treat the bias as an additional node in a layer with a constant value of $-1$, then we can simplify the equation:
 
@@ -93,7 +93,7 @@ $$ y_{kt} = f_k(x_{kt}) = x_{kt} $$
 
 Once the inputs have been propagated through the network, we can calculate the error. If we have multiple associations, we simply sum the error of each association. 
 
-$$ E = \sum^{T}_{t = 1} E_t = \frac{1}{2} \sum^{T}_{t = 1} (y_{kt} - y\prime_{kt})^2 $$
+$$ E = \sum^{T}_{t = 1} E_t = \frac{1}{2t} \sum^{T}_{t = 1} (y_{kt} - y\prime_{kt})^2 $$
 
 #### The backward pass
 
