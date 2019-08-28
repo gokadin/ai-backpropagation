@@ -33,7 +33,7 @@ A perceptron is a processing unit that takes an input <img src="/tex/332cc365a49
 
 Within a neural network, its input is the sum of the previous layer node outputs times their corresponding weight, minus the previous layer bias unit times its weight:
 
-<p align="center"><img src="/tex/30e928c3f095655e194566fa8f685f4c.svg?invert_in_darkmode&sanitize=true" align=middle width=158.0792961pt height=47.806078649999996pt/></p>
+<p align="center"><img src="/tex/5644bc2c47480243c1652ba7e3a88ae7.svg?invert_in_darkmode&sanitize=true" align=middle width=134.73348239999999pt height=47.806078649999996pt/></p>
 
 If we treat the bias as an additional node in a layer with a constant value of <img src="/tex/e11a8cfcf953c683196d7a48677b2277.svg?invert_in_darkmode&sanitize=true" align=middle width=21.00464354999999pt height=21.18721440000001pt/>, then we can simplify the equation:
 
@@ -93,7 +93,7 @@ and their output is the same since we assigned them the identity activation func
 
 Once the inputs have been propagated through the network, we can calculate the error. If we have multiple associations, we simply sum the error of each association. 
 
-<p align="center"><img src="/tex/6057c698055c0474a4a50b2ad52f8b05.svg?invert_in_darkmode&sanitize=true" align=middle width=226.73802029999996pt height=47.60747145pt/></p>
+<p align="center"><img src="/tex/4195df40f95a0174fdffcf8c6d061afe.svg?invert_in_darkmode&sanitize=true" align=middle width=232.67409989999996pt height=47.60747145pt/></p>
 
 #### The backward pass
 
