@@ -93,7 +93,7 @@ and their output is the same since we assigned them the identity activation func
 
 Once the inputs have been propagated through the network, we can calculate the error. If we have multiple associations, we simply sum the error of each association. 
 
-<p align="center"><img src="/tex/4195df40f95a0174fdffcf8c6d061afe.svg?invert_in_darkmode&sanitize=true" align=middle width=232.67409989999996pt height=47.60747145pt/></p>
+<p align="center"><img src="/tex/552c8104bb2b52c14cdebf4ff1f8c6ed.svg?invert_in_darkmode&sanitize=true" align=middle width=238.6273098pt height=47.60747145pt/></p>
 
 #### The backward pass
 
