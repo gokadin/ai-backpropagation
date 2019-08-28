@@ -61,26 +61,23 @@ func buildExpectedOutputs() [][]float64 {
 }
 
 func learn(network *layerCollection, inputs [][]float64, expectedOutputs [][]float64) {
-	learn := true
-	for learn {
+	counter := 0
+	for {
+		counter++
 		err := 0.0
 		for inputIndex, input := range inputs {
 			forwardPass(network, input)
 			backpropagate(network, expectedOutputs[inputIndex])
-			for outputNodeIndex, outputNode := range network.outputLayer().Nodes() {
-				err += outputNode.Output() - expectedOutputs[inputIndex][outputNodeIndex]
-			}
-			err = math.Pow(err, 2)
+			err += math.Pow(accumulateError(network.outputLayer(), expectedOutputs[inputIndex]), 2)
 		}
 
 		err /= float64(len(network.outputLayer().Nodes()))
 		fmt.Println("error:", err)
 		if err < 0.0001 {
-			learn = false
-			fmt.Println("Network finished learning.")
+			fmt.Println("network finished learning after", counter, "iterations")
+            break
 		}
 
-		// 4. update weights
 		updateWeights(network)
 	}
 }
@@ -92,25 +89,22 @@ func forwardPass(network *layerCollection, input []float64) {
 }
 
 func backpropagate(network *layerCollection, expectedOutput []float64) {
-	network.inputLayer().ResetDeltas()
-
-	// 1. accumulate deltas on output layer
-	accumulateOutputDeltas(network.outputLayer(), expectedOutput)
-
-	// 2. accumulate deltas on hidden layers
-	accumulateHiddenDeltas(network)
-
-	// 3. accumulate gradients
+	calculateDeltas(network, expectedOutput)
 	accumulateGradients(network)
 }
 
-func accumulateOutputDeltas(outputLayer *layer.Layer, expectedOutput []float64) {
+func calculateDeltas(network *layerCollection, expectedOutput []float64) {
+	calculateOutputDeltas(network.outputLayer(), expectedOutput)
+	calculateHiddenDeltas(network)
+}
+
+func calculateOutputDeltas(outputLayer *layer.Layer, expectedOutput []float64) {
 	for nodeIndex, outputNode := range outputLayer.Nodes() {
-		outputNode.AddDelta(outputNode.Output() - expectedOutput[nodeIndex])
+		outputNode.SetDelta(outputNode.Output() - expectedOutput[nodeIndex])
 	}
 }
 
-func accumulateHiddenDeltas(network *layerCollection) {
+func calculateHiddenDeltas(network *layerCollection) {
 	// going backwards from the last hidden layer to the first hidden layer
 	for i := len(network.layers) - 2; i > 0; i-- {
 		for _, node := range network.layers[i].Nodes() {
@@ -118,7 +112,7 @@ func accumulateHiddenDeltas(network *layerCollection) {
 			for _, connection := range node.Connections() {
 				sumPreviousDeltasAndWeights += connection.NextNode().Delta() * connection.Weight()
 			}
-			node.AddDelta(sumPreviousDeltasAndWeights * network.layers[i].ActivationDerivative()(node.Input()))
+			node.SetDelta(sumPreviousDeltasAndWeights * network.layers[i].ActivationDerivative()(node.Input()))
 		}
 	}
 }
@@ -143,6 +137,14 @@ func updateWeights(network *layerCollection) {
 			}
 		}
 	}
+}
+
+func accumulateError(outputLayer *layer.Layer, expectedOutput []float64) float64 {
+	err := 0.0
+	for outputNodeIndex, outputNode := range outputLayer.Nodes() {
+		err += outputNode.Output() - expectedOutput[outputNodeIndex]
+	}
+	return err
 }
 
 func test(network *layerCollection, inputs [][]float64) {
