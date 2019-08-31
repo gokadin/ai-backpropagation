@@ -71,7 +71,7 @@ func learn(network *layerCollection, inputs [][]float64, expectedOutputs [][]flo
 			err += math.Pow(accumulateError(network.outputLayer(), expectedOutputs[inputIndex]), 2)
 		}
 
-		err /= float64(len(network.outputLayer().Nodes()))
+		err /= 2 * float64(len(network.outputLayer().Nodes()))
 		fmt.Println("error:", err)
 		if err < 0.0001 {
 			fmt.Println("network finished learning after", counter, "iterations")
@@ -133,7 +133,6 @@ func updateWeights(network *layerCollection) {
 		for _, node := range network.layers[i].Nodes() {
 			for _, connection := range node.Connections() {
 				connection.UpdateWeight(learningRate)
-				connection.ResetGradient()
 			}
 		}
 	}
