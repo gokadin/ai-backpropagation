@@ -132,7 +132,7 @@ func Test_accumulateOutputDeltas_setsTheCorrectValues(t *testing.T) {
 	net.inputLayer().SetInputs(inputs[0])
 	net.inputLayer().Activate()
 
-	accumulateOutputDeltas(net.outputLayer(), outputs[0])
+	calculateOutputDeltas(net.outputLayer(), outputs[0])
 
 	expected := net.outputLayer().Nodes()[0].Output() - outputs[0][0]
 	if net.outputLayer().Nodes()[0].Delta() != expected {
@@ -150,7 +150,7 @@ func Test_accumulateOutputDeltas_accumulatesTheCorrectValuesWithTwoAssociations(
 		net.inputLayer().SetInputs(inputs[i])
 		net.inputLayer().Activate()
 
-		accumulateOutputDeltas(net.outputLayer(), outputs[i])
+		calculateOutputDeltas(net.outputLayer(), outputs[i])
 		expected += net.outputLayer().Nodes()[0].Output() - outputs[i][0]
 	}
 
@@ -169,7 +169,7 @@ func Test_accumulateOutputDeltas_accumulatesTheCorrectValuesWithTwoAssociationsA
 		net.inputLayer().SetInputs(inputs[i])
 		net.inputLayer().Activate()
 
-		accumulateOutputDeltas(net.outputLayer(), outputs[i])
+		calculateOutputDeltas(net.outputLayer(), outputs[i])
 		for outputNodeIndex, outputNode := range net.outputLayer().Nodes() {
 			expected[outputNodeIndex] += outputNode.Output() - outputs[i][outputNodeIndex]
 		}
@@ -190,9 +190,9 @@ func Test_accumulateDeltas_setsTheCorrectValues(t *testing.T) {
 	net.inputLayer().ResetInputs()
 	net.inputLayer().SetInputs(inputs[0])
 	net.inputLayer().Activate()
-	accumulateOutputDeltas(net.outputLayer(), outputs[0])
+	calculateOutputDeltas(net.outputLayer(), outputs[0])
 
-	accumulateHiddenDeltas(net)
+	calculateHiddenDeltas(net)
 
 	expected := net.layers[1].Nodes()[0].Output() * net.outputLayer().Nodes()[0].Delta() * net.layers[1].Nodes()[0].Connection(0).Weight()
 	if net.layers[1].Nodes()[0].Delta() != expected {
@@ -209,9 +209,9 @@ func Test_accumulateDeltas_accumulatesTheCorrectValuesWithTwoAssociations(t *tes
 		net.inputLayer().ResetInputs()
 		net.inputLayer().SetInputs(inputs[i])
 		net.inputLayer().Activate()
-		accumulateOutputDeltas(net.outputLayer(), outputs[i])
+		calculateOutputDeltas(net.outputLayer(), outputs[i])
 
-		accumulateHiddenDeltas(net)
+		calculateHiddenDeltas(net)
 		expected += net.layers[1].Nodes()[0].Output() * net.outputLayer().Nodes()[0].Delta() * net.layers[1].Nodes()[0].Connection(0).Weight()
 	}
 
@@ -228,7 +228,7 @@ func Test_accumulateGradients_setsTheCorrectValues(t *testing.T) {
 	net.inputLayer().ResetInputs()
 	net.inputLayer().SetInputs(inputs[0])
 	net.inputLayer().Activate()
-	accumulateOutputDeltas(net.outputLayer(), outputs[0])
+	calculateOutputDeltas(net.outputLayer(), outputs[0])
 
 	accumulateGradients(net)
 
@@ -247,7 +247,7 @@ func Test_accumulateGradients_accumulatesTheCorrectValuesWithTwoAssociations(t *
 		net.inputLayer().ResetInputs()
 		net.inputLayer().SetInputs(inputs[i])
 		net.inputLayer().Activate()
-		accumulateOutputDeltas(net.outputLayer(), outputs[i])
+		calculateOutputDeltas(net.outputLayer(), outputs[i])
 
 		accumulateGradients(net)
 		expected += net.outputLayer().Nodes()[0].Delta() * net.layers[1].Nodes()[0].Output()
