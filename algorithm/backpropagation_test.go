@@ -3,22 +3,45 @@ package algorithm
 import (
 	"github.com/gokadin/ai-backpropagation/layer"
 	"math"
+	"math/rand"
 	"testing"
 )
 
-func buildSimpleTestNetwork(inputCount, hiddenCount, outputCount int, activationFunction string) *Collection {
-	inputLayer := NewLayer(inputCount, layer.FunctionIdentity)
-	hiddenLayer := NewLayer(hiddenCount, activationFunction)
-	outputLayer := NewLayer(outputCount, layer.FunctionIdentity)
+func buildSimpleTestNetwork(inputCount, hiddenCount, outputCount int, activationFunction string) *layer.Collection {
+	inputLayer := layer.NewLayer(inputCount, layer.FunctionIdentity)
+	hiddenLayer := layer.NewLayer(hiddenCount, activationFunction)
+	outputLayer := layer.NewLayer(outputCount, layer.FunctionIdentity)
 	inputLayer.ConnectTo(hiddenLayer)
 	hiddenLayer.ConnectTo(outputLayer)
 
-	network := NewCollection()
+	network := layer.NewCollection()
 	network.Layers = append(network.Layers, inputLayer)
 	network.Layers = append(network.Layers, hiddenLayer)
 	network.Layers = append(network.Layers, outputLayer)
 
 	return network
+}
+
+func generateSimpleData(inputCount, outputCount, associations int) ([][]float64, [][]float64) {
+	inputs := make([][]float64, associations)
+	for i := 0; i < associations; i++ {
+		input := make([]float64, inputCount)
+		for j := 0; j < inputCount; j++ {
+			input[j] = rand.Float64()
+		}
+		inputs[i] = input
+	}
+
+	outputs := make([][]float64, associations)
+	for i := 0; i < associations; i++ {
+		output := make([]float64, inputCount)
+		for j := 0; j < outputCount; j++ {
+			output[j] = rand.Float64()
+		}
+		outputs[i] = output
+	}
+
+	return inputs, outputs
 }
 
 func Test_accumulateOutputDeltas_setsTheCorrectValues(t *testing.T) {
