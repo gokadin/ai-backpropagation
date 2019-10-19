@@ -1,14 +1,22 @@
 package node
 
+import "math/rand"
+
 type connection struct {
 	nextNode *Node
 	weight   float64
 	gradient float64
-	velocity float64
-	sqrt float64
+	gradientCounter int
 }
 
-func newConnection(nextNode *Node, weight float64) *connection {
+func newConnection(nextNode *Node) *connection {
+	return &connection{
+		nextNode: nextNode,
+		weight:   rand.Float64(),
+	}
+}
+
+func newConnectionWithWeight(nextNode *Node, weight float64) *connection {
 	return &connection{
 		nextNode: nextNode,
 		weight:   weight,
@@ -25,40 +33,16 @@ func (c *connection) NextNode() *Node {
 
 func (c *connection) AddGradient(value float64) {
 	c.gradient += value
+	c.gradientCounter++
 }
 
 func (c *connection) Gradient() float64 {
 	return c.gradient
 }
 
-func (c *connection) ResetGradient() {
+func (c *connection) UpdateWeight(learningRate float64) {
+	c.weight -= learningRate * c.gradient / float64(c.gradientCounter)
 	c.gradient = 0.0
+	c.gradientCounter = 0
 }
 
-func (c *connection) GetWeight() float64 {
-	return c.weight
-}
-
-func (c *connection) SetWeight(weight float64) {
-	c.weight = weight
-}
-
-func (c *connection) GetGradient() float64 {
-	return c.gradient
-}
-
-func (c *connection) GetVelocity() float64 {
-	return c.velocity
-}
-
-func (c *connection) SetVelocity(velocity float64) {
-	c.velocity = velocity
-}
-
-func (c *connection) GetSqrt() float64 {
-	return c.sqrt
-}
-
-func (c *connection) SetSqrt(sqrt float64) {
-	c.sqrt = sqrt
-}

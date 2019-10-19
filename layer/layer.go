@@ -3,14 +3,13 @@ package layer
 import (
 	"github.com/gokadin/ai-backpropagation/node"
 	"log"
-	"math"
-	"math/rand"
 )
 
 type Layer struct {
 	nodes     []*node.Node
 	nextLayer *Layer
-    activationFunctionName string
+	activationFunction func(x float64) float64
+	activationFunctionDerivative func(x float64) float64
 	isOutputLayer bool
 }
 
@@ -21,7 +20,8 @@ func NewLayer(size int, activationFunctionName string) *Layer {
 	}
 	return &Layer{
 		nodes: nodes,
-        activationFunctionName: activationFunctionName,
+		activationFunction: getActivationFunction(activationFunctionName),
+		activationFunctionDerivative: getActivationFunctionDerivative(activationFunctionName),
 		isOutputLayer: false,
 	}
 }
@@ -33,7 +33,8 @@ func NewOutputLayer(size int, activationFunctionName string) *Layer {
 	}
 	return &Layer{
 		nodes: nodes,
-        activationFunctionName: activationFunctionName,
+		activationFunction: getActivationFunction(activationFunctionName),
+		activationFunctionDerivative: getActivationFunctionDerivative(activationFunctionName),
 		isOutputLayer: true,
 	}
 }
@@ -51,11 +52,7 @@ func (l *Layer) ConnectTo(nextLayer *Layer) {
 
 	for _, n := range l.nodes {
 		for _, nextNode := range nextLayer.nodes {
-
-			/* Better weight initialization */
-
-			weight := rand.NormFloat64() / math.Sqrt(float64(l.Size()))
-			n.ConnectTo(nextNode, weight)
+			n.ConnectTo(nextNode)
 		}
 	}
 }
@@ -93,15 +90,8 @@ func (l *Layer) ResetInputs() {
 }
 
 func (l *Layer) Activate() {
-	switch l.activationFunctionName {
-	case FunctionSoftmax:
-		l.activateSoftmax()
-		break
-	default:
-		for _, n := range l.nodes {
-			n.Activate(getActivationFunction(l.activationFunctionName))
-		}
-		break
+	for _, n := range l.nodes {
+		n.Activate(l.activationFunction)
 	}
 
 	if l.nextLayer != nil {
@@ -110,17 +100,6 @@ func (l *Layer) Activate() {
 }
 
 func (l *Layer) ActivationDerivative() func (x float64) float64 {
-	return getActivationFunctionDerivative(l.activationFunctionName)
+	return l.activationFunctionDerivative
 }
 
-func (l *Layer) activateSoftmax() {
-	sum := 0.0
-	for _, n := range l.nodes {
-		sum += math.Pow(math.E, n.Input())
-	}
-	for _, n := range l.nodes {
-		inputExp := math.Pow(math.E, n.Input())
-		partialSum := sum - inputExp
-		n.SetOutput(inputExp / partialSum)
-	}
-}

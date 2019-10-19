@@ -78,8 +78,7 @@ func updateWeights(network *layer.Collection, learningRate float64) {
 	for i := 0; i < len(network.Layers)-1; i++ {
 		for _, node := range network.Layers[i].Nodes() {
 			for _, connection := range node.Connections() {
-				connection.SetWeight(connection.GetWeight() - connection.GetGradient() * learningRate)
-				connection.ResetGradient()
+				connection.UpdateWeight(learningRate)
 			}
 		}
 	}

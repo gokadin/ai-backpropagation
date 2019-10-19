@@ -13,8 +13,12 @@ func NewNode() *Node {
 	}
 }
 
-func (n *Node) ConnectTo(nextNode *Node, weight float64) {
-	n.connections = append(n.connections, newConnection(nextNode, weight))
+func (n *Node) ConnectTo(nextNode *Node) {
+	n.connections = append(n.connections, newConnection(nextNode))
+}
+
+func (n *Node) ConnectToWithWeight(nextNode *Node, weight float64) {
+	n.connections = append(n.connections, newConnectionWithWeight(nextNode, weight))
 }
 
 func (n *Node) Connections() []*connection {
@@ -37,10 +41,6 @@ func (n *Node) Output() float64 {
 	return n.output
 }
 
-func (n *Node) SetOutput(value float64) {
-    n.output = value
-}
-
 func (n *Node) SetInput(value float64) {
 	n.input = value
 }
@@ -54,7 +54,7 @@ func (n *Node) SetDelta(delta float64) {
 }
 
 func (n *Node) Delta() float64 {
-    return n.delta
+	return n.delta
 }
 
 func (n *Node) Activate(activationFunction func(x float64) float64) {
@@ -64,3 +64,4 @@ func (n *Node) Activate(activationFunction func(x float64) float64) {
 		connection.nextNode.AddInput(n.output * connection.weight)
 	}
 }
+

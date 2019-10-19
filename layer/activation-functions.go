@@ -9,9 +9,6 @@ const (
 	FunctionSigmoidDerivative = "functionSigmoidDerivative"
 	FunctionRelu = "functionRelu"
 	FunctionReluDerivative = "functionReluDerivative"
-	FunctionLeakyRelu = "functionLeakyRelu"
-	FunctionLeakyReluDerivative = "functionLeakyReluDerivative"
-	FunctionSoftmax = "functionSoftmax"
 )
 
 func getActivationFunction(name string) func(x float64) float64 {
@@ -28,10 +25,6 @@ func getActivationFunction(name string) func(x float64) float64 {
 		return Relu
 	case FunctionReluDerivative:
 		return ReluDerivative
-	case FunctionLeakyRelu:
-		return LeakyRelu
-	case FunctionLeakyReluDerivative:
-		return LeakyReluDerivative
 	default:
 		return nil
 	}
@@ -67,20 +60,4 @@ func ReluDerivative(x float64) float64 {
 	}
 
     return 0.0
-}
-
-func LeakyRelu(x float64) float64 {
-	if x >= 0 {
-		return x
-	}
-
-	return 0.01 * x
-}
-
-func LeakyReluDerivative(x float64) float64 {
-	if x >= 0.0 {
-		return 1.0
-	}
-
-	return 0.01
 }
