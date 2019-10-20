@@ -10,7 +10,7 @@ import (
 func buildSimpleTestNetwork(inputCount, hiddenCount, outputCount int, activationFunction string) *layer.Collection {
 	inputLayer := layer.NewLayer(inputCount, layer.FunctionIdentity)
 	hiddenLayer := layer.NewLayer(hiddenCount, activationFunction)
-	outputLayer := layer.NewLayer(outputCount, layer.FunctionIdentity)
+	outputLayer := layer.NewOutputLayer(outputCount, layer.FunctionIdentity)
 	inputLayer.ConnectTo(hiddenLayer)
 	hiddenLayer.ConnectTo(outputLayer)
 

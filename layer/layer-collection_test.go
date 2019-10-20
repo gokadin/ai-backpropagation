@@ -10,7 +10,7 @@ import (
 func buildSimpleTestNetwork(inputCount, hiddenCount, outputCount int, activationFunction string) *Collection {
 	inputLayer := NewLayer(inputCount, layer.FunctionIdentity)
 	hiddenLayer := NewLayer(hiddenCount, activationFunction)
-	outputLayer := NewLayer(outputCount, layer.FunctionIdentity)
+	outputLayer := NewOutputLayer(outputCount, layer.FunctionIdentity)
 	inputLayer.ConnectTo(hiddenLayer)
 	hiddenLayer.ConnectTo(outputLayer)
 
@@ -65,8 +65,8 @@ func Test_forwardPass_outputIsCorrect(t *testing.T) {
 	net.InputLayer().SetInputs(inputs[0])
 	net.InputLayer().Activate()
 
-	expected := inputs[0][0] * net.InputLayer().Nodes()[0].Connection(0).Weight()
-	expected = expected * net.Layers[1].Nodes()[0].Connection(0).Weight()
+	expected := inputs[0][0] * net.InputLayer().Nodes()[0].Connection(0).Weight() + net.InputLayer().Nodes()[1].Connections()[0].Weight()
+	expected = expected * net.Layers[1].Nodes()[0].Connection(0).Weight() + net.Layers[1].Nodes()[1].Connections()[0].Weight()
 	if net.OutputLayer().Nodes()[0].Output() != expected {
 		t.Fatalf("Expected %f, got %f", expected, net.OutputLayer().Nodes()[0].Output())
 	}
@@ -80,9 +80,9 @@ func Test_forwardPass_outputIsCorrectWithSigmoidActivationHiddenNode(t *testing.
 	net.InputLayer().SetInputs(inputs[0])
 	net.InputLayer().Activate()
 
-	expected := inputs[0][0] * net.InputLayer().Nodes()[0].Connection(0).Weight()
+	expected := inputs[0][0] * net.InputLayer().Nodes()[0].Connection(0).Weight() + net.InputLayer().Nodes()[1].Connections()[0].Weight()
 	expected = 1 / (1 + math.Pow(math.E, -expected))
-	expected = expected * net.Layers[1].Nodes()[0].Connection(0).Weight()
+	expected = expected * net.Layers[1].Nodes()[0].Connection(0).Weight() + net.Layers[1].Nodes()[1].Connections()[0].Weight()
 	if net.OutputLayer().Nodes()[0].Output() != expected {
 		t.Fatalf("Expected %f, got %f", expected, net.OutputLayer().Nodes()[0].Output())
 	}
@@ -98,7 +98,8 @@ func Test_forwardPass_outputIsCorrectWithTwoInputNodes(t *testing.T) {
 
 	h1 := inputs[0][0] * net.InputLayer().Nodes()[0].Connection(0).Weight()
 	h1 += inputs[0][1] * net.InputLayer().Nodes()[1].Connection(0).Weight()
-	expected := h1 * net.Layers[1].Nodes()[0].Connection(0).Weight()
+	h1 += net.InputLayer().Nodes()[2].Connections()[0].Weight()
+	expected := h1 * net.Layers[1].Nodes()[0].Connection(0).Weight() + net.Layers[1].Nodes()[1].Connections()[0].Weight()
 	if net.OutputLayer().Nodes()[0].Output() != expected {
 		t.Fatalf("Expected %f, got %f", expected, net.OutputLayer().Nodes()[0].Output())
 	}
@@ -114,10 +115,13 @@ func Test_forwardPass_outputIsCorrectWithTwoInputNodesAndTwoHiddenNodes(t *testi
 
 	h1 := inputs[0][0] * net.InputLayer().Nodes()[0].Connection(0).Weight()
 	h1 += inputs[0][1] * net.InputLayer().Nodes()[1].Connection(0).Weight()
+	h1 += net.InputLayer().Nodes()[2].Connections()[0].Weight()
 	h2 := inputs[0][0] * net.InputLayer().Nodes()[0].Connection(1).Weight()
 	h2 += inputs[0][1] * net.InputLayer().Nodes()[1].Connection(1).Weight()
+	h2 += net.InputLayer().Nodes()[2].Connections()[1].Weight()
 	expected := h1 * net.Layers[1].Nodes()[0].Connection(0).Weight()
 	expected += h2 * net.Layers[1].Nodes()[1].Connection(0).Weight()
+	expected += net.Layers[1].Nodes()[2].Connections()[0].Weight()
 	if net.OutputLayer().Nodes()[0].Output() != expected {
 		t.Fatalf("Expected %f, got %f", expected, net.OutputLayer().Nodes()[0].Output())
 	}

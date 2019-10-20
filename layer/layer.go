@@ -18,6 +18,7 @@ func NewLayer(size int, activationFunctionName string) *Layer {
 	for i := range nodes {
 		nodes[i] = node.NewNode()
 	}
+	nodes[len(nodes) - 1].MarkBiasNode()
 	return &Layer{
 		nodes: nodes,
 		activationFunction: getActivationFunction(activationFunctionName),
@@ -52,7 +53,9 @@ func (l *Layer) ConnectTo(nextLayer *Layer) {
 
 	for _, n := range l.nodes {
 		for _, nextNode := range nextLayer.nodes {
-			n.ConnectTo(nextNode)
+			if !nextNode.IsBias() {
+				n.ConnectTo(nextNode)
+			}
 		}
 	}
 }
@@ -73,15 +76,13 @@ func (l *Layer) SetInputs(values []float64) {
 	for i, value := range values {
 		l.nodes[i].SetInput(value)
 	}
-
-	if !l.isOutputLayer {
-		l.nodes[len(values)].SetInput(1.0)
-	}
 }
 
 func (l *Layer) ResetInputs() {
 	for _, n := range l.nodes {
-		n.ResetInput()
+		if !n.IsBias() {
+			n.ResetInput()
+		}
 	}
 
 	if l.nextLayer != nil {
