@@ -7,7 +7,6 @@ Backpropagation is a technique used to teach a neural network that has at least 
 - [part 1 - simplest network](https://github.com/gokadin/ai-simplest-network)
 - part 2 - backpropagation (**you are here**)
 - [part 3 - backpropagation-continued](https://github.com/gokadin/ai-backpropagation-continued)
-- [part 4 - hopfield networks](https://github.com/gokadin/ai-hopfield-networks)
 
 ## Table of Contents
 
@@ -48,7 +47,9 @@ Why do we need an activation function? Without it the output of every node will 
 If <img src="/tex/36d6e7b3abf42ac72c9766d04e081cf1.svg?invert_in_darkmode&sanitize=true" align=middle width=73.64811134999998pt height=24.657735299999988pt/> then typical activation functions are:
 
 - Sigmoid <img src="/tex/06a4dabcd23aee6477642df56f5823d0.svg?invert_in_darkmode&sanitize=true" align=middle width=71.65327124999999pt height=27.77565449999998pt/>
+
 - ReLU or rectified linear unit <img src="/tex/2303c524a588b86a618bd6158a13de22.svg?invert_in_darkmode&sanitize=true" align=middle width=100.78959329999998pt height=24.65753399999998pt/>
+
 - tanh <img src="/tex/d780a3472dc758b220b61dab83747006.svg?invert_in_darkmode&sanitize=true" align=middle width=86.71050134999999pt height=24.65753399999998pt/>
 
 ### Backpropagation
