@@ -2,10 +2,13 @@ package layer
 
 import (
 	"github.com/gokadin/ann-core/layer"
+	"github.com/stretchr/testify/assert"
 	"math"
 	"math/rand"
 	"testing"
 )
+
+const floatDelta = 0.000001
 
 func buildSimpleTestNetwork(inputCount, hiddenCount, outputCount int, activationFunction string) *Collection {
 	inputLayer := NewLayer(inputCount, layer.FunctionIdentity)
@@ -51,9 +54,7 @@ func Test_forwardPass_setsCorrectInputValues(t *testing.T) {
 	net.InputLayer().SetInputs(inputs[0])
 
 	for i, value := range inputs[0] {
-		if net.InputLayer().Nodes()[i].Input() != value {
-			t.Fatalf("Expected %f, got %f", value, net.InputLayer().Nodes()[i].Input())
-		}
+		assert.Equal(t, value, net.InputLayer().Nodes()[i].Input())
 	}
 }
 
@@ -65,11 +66,9 @@ func Test_forwardPass_outputIsCorrect(t *testing.T) {
 	net.InputLayer().SetInputs(inputs[0])
 	net.InputLayer().Activate()
 
-	expected := inputs[0][0] * net.InputLayer().Nodes()[0].Connection(0).Weight() + net.InputLayer().Nodes()[1].Connections()[0].Weight()
-	expected = expected * net.Layers[1].Nodes()[0].Connection(0).Weight() + net.Layers[1].Nodes()[1].Connections()[0].Weight()
-	if net.OutputLayer().Nodes()[0].Output() != expected {
-		t.Fatalf("Expected %f, got %f", expected, net.OutputLayer().Nodes()[0].Output())
-	}
+	expected := inputs[0][0] * net.InputLayer().Nodes()[0].Connection(0).Weight() + net.InputLayer().Bias().Connections()[0].Weight()
+	expected = expected * net.Layers[1].Nodes()[0].Connection(0).Weight() + net.Layers[1].Bias().Connections()[0].Weight()
+	assert.InDelta(t, expected, net.OutputLayer().Nodes()[0].Output(), floatDelta)
 }
 
 func Test_forwardPass_outputIsCorrectWithSigmoidActivationHiddenNode(t *testing.T) {
@@ -80,12 +79,10 @@ func Test_forwardPass_outputIsCorrectWithSigmoidActivationHiddenNode(t *testing.
 	net.InputLayer().SetInputs(inputs[0])
 	net.InputLayer().Activate()
 
-	expected := inputs[0][0] * net.InputLayer().Nodes()[0].Connection(0).Weight() + net.InputLayer().Nodes()[1].Connections()[0].Weight()
+	expected := inputs[0][0] * net.InputLayer().Nodes()[0].Connection(0).Weight() + net.InputLayer().Bias().Connections()[0].Weight()
 	expected = 1 / (1 + math.Pow(math.E, -expected))
-	expected = expected * net.Layers[1].Nodes()[0].Connection(0).Weight() + net.Layers[1].Nodes()[1].Connections()[0].Weight()
-	if net.OutputLayer().Nodes()[0].Output() != expected {
-		t.Fatalf("Expected %f, got %f", expected, net.OutputLayer().Nodes()[0].Output())
-	}
+	expected = expected * net.Layers[1].Nodes()[0].Connection(0).Weight() + net.Layers[1].Bias().Connections()[0].Weight()
+	assert.InDelta(t, expected, net.OutputLayer().Nodes()[0].Output(), floatDelta)
 }
 
 func Test_forwardPass_outputIsCorrectWithTwoInputNodes(t *testing.T) {
@@ -98,11 +95,9 @@ func Test_forwardPass_outputIsCorrectWithTwoInputNodes(t *testing.T) {
 
 	h1 := inputs[0][0] * net.InputLayer().Nodes()[0].Connection(0).Weight()
 	h1 += inputs[0][1] * net.InputLayer().Nodes()[1].Connection(0).Weight()
-	h1 += net.InputLayer().Nodes()[2].Connections()[0].Weight()
-	expected := h1 * net.Layers[1].Nodes()[0].Connection(0).Weight() + net.Layers[1].Nodes()[1].Connections()[0].Weight()
-	if net.OutputLayer().Nodes()[0].Output() != expected {
-		t.Fatalf("Expected %f, got %f", expected, net.OutputLayer().Nodes()[0].Output())
-	}
+	h1 += net.InputLayer().Bias().Connections()[0].Weight()
+	expected := h1 * net.Layers[1].Nodes()[0].Connection(0).Weight() + net.Layers[1].Bias().Connections()[0].Weight()
+	assert.InDelta(t, expected, net.OutputLayer().Nodes()[0].Output(), floatDelta)
 }
 
 func Test_forwardPass_outputIsCorrectWithTwoInputNodesAndTwoHiddenNodes(t *testing.T) {
@@ -115,14 +110,12 @@ func Test_forwardPass_outputIsCorrectWithTwoInputNodesAndTwoHiddenNodes(t *testi
 
 	h1 := inputs[0][0] * net.InputLayer().Nodes()[0].Connection(0).Weight()
 	h1 += inputs[0][1] * net.InputLayer().Nodes()[1].Connection(0).Weight()
-	h1 += net.InputLayer().Nodes()[2].Connections()[0].Weight()
+	h1 += net.InputLayer().Bias().Connections()[0].Weight()
 	h2 := inputs[0][0] * net.InputLayer().Nodes()[0].Connection(1).Weight()
 	h2 += inputs[0][1] * net.InputLayer().Nodes()[1].Connection(1).Weight()
-	h2 += net.InputLayer().Nodes()[2].Connections()[1].Weight()
+	h2 += net.InputLayer().Bias().Connections()[1].Weight()
 	expected := h1 * net.Layers[1].Nodes()[0].Connection(0).Weight()
 	expected += h2 * net.Layers[1].Nodes()[1].Connection(0).Weight()
-	expected += net.Layers[1].Nodes()[2].Connections()[0].Weight()
-	if net.OutputLayer().Nodes()[0].Output() != expected {
-		t.Fatalf("Expected %f, got %f", expected, net.OutputLayer().Nodes()[0].Output())
-	}
+	expected += net.Layers[1].Bias().Connections()[0].Weight()
+	assert.InDelta(t, expected, net.OutputLayer().Nodes()[0].Output(), floatDelta)
 }

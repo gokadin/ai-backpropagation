@@ -14,6 +14,15 @@ func NewNode() *Node {
 	}
 }
 
+func NewBiasNode(value float64) *Node {
+	return &Node{
+		connections: make([]*connection, 0),
+		input: value,
+		output: value,
+		isBias: true,
+	}
+}
+
 func (n *Node) MarkBiasNode() {
     n.isBias = true
     n.input = 1
