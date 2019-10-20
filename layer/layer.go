@@ -72,6 +72,14 @@ func (l *Layer) Node(index int) *node.Node {
 	return l.nodes[index]
 }
 
+func (l *Layer) Parameters() []*node.Node {
+	if l.isOutputLayer {
+		return l.nodes
+	}
+
+	return append(l.nodes, l.bias)
+}
+
 func (l *Layer) Bias() *node.Node {
 	return l.bias
 }

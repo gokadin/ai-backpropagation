@@ -45,7 +45,7 @@ func calculateDeltas(network *layer.Collection, expectedOutput []float64) {
 }
 
 func calculateOutputDeltas(outputLayer *layer.Layer, expectedOutput []float64) {
-	for nodeIndex, outputNode := range outputLayer.Nodes() {
+	for nodeIndex, outputNode := range outputLayer.Parameters() {
 		outputNode.SetDelta(outputNode.Output() - expectedOutput[nodeIndex])
 	}
 }
@@ -53,7 +53,7 @@ func calculateOutputDeltas(outputLayer *layer.Layer, expectedOutput []float64) {
 func calculateHiddenDeltas(network *layer.Collection) {
 	// going backwards from the last hidden layer to the first hidden layer
 	for i := len(network.Layers) - 2; i > 0; i-- {
-		for _, node := range network.Layers[i].Nodes() {
+		for _, node := range network.Layers[i].Parameters() {
 			sumPreviousDeltasAndWeights := 0.0
 			for _, connection := range node.Connections() {
 				sumPreviousDeltasAndWeights += connection.NextNode().Delta() * connection.Weight()
@@ -66,7 +66,7 @@ func calculateHiddenDeltas(network *layer.Collection) {
 func accumulateGradients(network *layer.Collection) {
 	// going backwards from the last hidden layer to the input layer
 	for i := len(network.Layers) - 2; i >= 0; i-- {
-		for _, node := range network.Layers[i].Nodes() {
+		for _, node := range network.Layers[i].Parameters() {
 			for _, connection := range node.Connections() {
 				connection.AddGradient(connection.NextNode().Delta() * node.Output())
 			}
@@ -76,7 +76,7 @@ func accumulateGradients(network *layer.Collection) {
 
 func updateWeights(network *layer.Collection, learningRate float64) {
 	for i := 0; i < len(network.Layers)-1; i++ {
-		for _, node := range network.Layers[i].Nodes() {
+		for _, node := range network.Layers[i].Parameters() {
 			for _, connection := range node.Connections() {
 				connection.UpdateWeight(learningRate)
 			}
