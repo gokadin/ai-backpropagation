@@ -30,7 +30,7 @@ Backpropagation is a technique used to teach a neural network that has at least 
 
 A perceptron is a processing unit that takes an input $x$, transforms it using an activation function $f$ and outputs the result $y$. 
 
-Within a neural network, its input is the sum of the previous layer node outputs times their corresponding weight, minus the previous layer bias unit times its weight:
+Within a neural network, its input is the sum of the previous layer node outputs times their corresponding weight, plus the previous layer bias:
 
 $$ x_j = \sum^I_{i = 1} x_iw_{ij} + b_i $$
 
@@ -76,21 +76,21 @@ We will assign the following activation functions to each layer nodes for all fo
 
 During the forward pass, we feed the inputs to the input layer and get the results in the output layer. 
 
-The input to each node in the hidden layer $x_{jt}$ is the sum of the output from all nodes of the input layer times their corresponding weight:
+The input to each node in the hidden layer $x_{j}$ is the sum of the output from all nodes of the input layer times their corresponding weight:
 
-$$x_{jt} = \sum_{i = 1}^{I} w_{ij}y_{it}$$
+$$x_{j} = \sum_{i = 1}^{I} w_{ij}y_{i}$$
 
 Since the hidden layer's activation function for each node is the sigmoid, then their output will be: 
 
-$$ y_{jt} = f_j(x_{jt}) = \frac{1}{1 + e^{-x_{jt}}} $$
+$$ y_{j} = f_j(x_{j}) = \frac{1}{1 + e^{-x_{j}}} $$
 
 In the same manner, the input to the output layer nodes are
 
-$$ x_{kt} = \sum^{J}_{j = 1} w_{jk}y_{jt} $$
+$$ x_{k} = \sum^{J}_{j = 1} w_{jk}y_{j} $$
 
 and their output is the same since we assigned them the identity activation function. 
 
-$$ y_{kt} = f_k(x_{kt}) = x_{kt} $$
+$$ y_{k} = f_k(x_{k}) = x_{k} $$
 
 Once the inputs have been propagated through the network, we can calculate the error. If we have multiple associations, we simply sum the error of each association. 
 
@@ -102,31 +102,31 @@ Now that we have the error, we can use it to update each weight of the network b
 
 We know from *part 1* of this series that the change of a weight is the negative of that weight's component in the error gradient times the learning rate. For a weight between the last hidden layer and the output layer, we then have
 
-$$ \Delta w_{jkt} = -\epsilon \frac{\partial E_t}{\partial w_{jk}} $$
+$$ \Delta w_{jk} = -\epsilon \frac{\partial E}{\partial w_{jk}} $$
 
 We can find the error gradient by using the chain rule
 
-$$ \frac{\partial E_t}{\partial w_{jk}} = \frac{\partial E_t}{\partial x_{kt}} \frac{\partial x_{kt}}{\partial w_{jk}} $$
+$$ \frac{\partial E}{\partial w_{jk}} = \frac{\partial E}{\partial x_{k}} \frac{\partial x_{k}}{\partial w_{jk}} $$
 
-$$ \frac{\partial E_t}{\partial x_{kt}} = \frac{\partial E_t}{\partial y_{kt}} \frac{\partial y_{kt}}{\partial x_{kt}} = \frac{\partial}{\partial y_{kt}} \left(\frac{1}{2}(y_{kt} - y\prime_{kt})^2\right) \frac{\partial}{\partial x_{kt}} \left(x_{kt}\right) = y_{kt} - y\prime_{kt} = \delta_{kt} $$
+$$ \frac{\partial E}{\partial x_{k}} = \frac{\partial E}{\partial y_{k}} \frac{\partial y_{k}}{\partial x_{k}} = \frac{\partial}{\partial y_{k}} \left(\frac{1}{2}(y_{k} - y\prime_{k})^2\right) \frac{\partial}{\partial x_{k}} \left(x_{k}\right) = y_{k} - y\prime_{k} = \delta_{k} $$
 
-$$ \frac{\partial x_{kt}}{\partial w_{jk}} = \frac{\partial}{\partial w_{jk}}(y_{jt}w_{jk}) = y_{jt} $$
+$$ \frac{\partial x_{k}}{\partial w_{jk}} = \frac{\partial}{\partial w_{jk}}(y_{j}w_{jk}) = y_{j} $$
 
-Therefore the change in weight is $\Delta w_{jkt} = -\epsilon \delta_{kt}y_{jt}$
+Therefore the change in weight is $\Delta w_{jk} = -\epsilon \delta_{k}y_{j}$
 
 For multiple associations, then the change in weight is the sum of each association $\Delta w_{jk} = -\epsilon \sum^T_{t = 1} \delta_{kt}y_{jt}$
 
 Similarly, for a weight between hidden layers, in our case between the input layer and our first hidden layer, we have
 
-$$ \Delta w_{ijt} = -\epsilon \frac{\partial E_t}{\partial w_{ij}} $$
+$$ \Delta w_{ij} = -\epsilon \frac{\partial E}{\partial w_{ij}} $$
 
-$$ \frac{\partial E_t}{\partial w_{ij}} = \frac{\partial E_t}{\partial x_{jt}} \frac{\partial x_{jt}}{\partial w_{ij}} = \delta_{jt} y_{it} \quad where \quad \delta_{jt} = y_{jt} (1 - y_{jt}) \sum^K_{k = 1} \delta_{kt} w_{jk}  $$
+$$ \frac{\partial E}{\partial w_{ij}} = \frac{\partial E}{\partial x_{j}} \frac{\partial x_{j}}{\partial w_{ij}} = \delta_{j} y_{i} \quad where \quad \delta_{j} = y_{j} (1 - y_{j}) \sum^K_{k = 1} \delta_{k} w_{jk}  $$
 
-Here the calculations are *slightly* more complex. Let's analyze the delta term $\delta_{jt}$ and understand how we got there. We start by calculating the partial derivative of $x_{jt}$ in respect to the error by using the chain rule
+Here the calculations are *slightly* more complex. Let's analyze the delta term $\delta_{j}$ and understand how we got there. We start by calculating the partial derivative of $x_{j}$ in respect to the error by using the chain rule
 
-$$ \frac{\partial E_t}{\partial x_{jt}} = \frac{\partial E_t}{\partial y_{jt}} \frac{d y_{jt}}{dx_{jt}} $$
+$$ \frac{\partial E}{\partial x_{j}} = \frac{\partial E}{\partial y_{j}} \frac{d y_{j}}{dx_{j}} $$
 
-$$ \frac{\partial E_t}{\partial y_{jt}} = \sum^K_{k = 1} \frac{\partial E_t}{\partial x_{kt}} \frac{\partial x_{kt}}{\partial y_{jt}} = \sum^K_{k = 1} \delta_{kt} w_{jk} \quad and \quad \frac{dy_{jt}}{dx_{jt}} = f'(x_{jt}) = f(x_{jt})(1 - f(x_{jt})) = y_{jt}(1 - y_{jt}) $$
+$$ \frac{\partial E}{\partial y_{j}} = \sum^K_{k = 1} \frac{\partial E}{\partial x_{k}} \frac{\partial x_{k}}{\partial y_{j}} = \sum^K_{k = 1} \delta_{k} w_{jk} \quad and \quad \frac{dy_{j}}{dx_{j}} = f'(x_{j}) = f(x_{j})(1 - f(x_{j})) = y_{j}(1 - y_{j}) $$
 
 Remember that our activation function $f$ is the sigmoid function and that its derivative is $f(x)(1 - f(x))$
 
@@ -136,13 +136,13 @@ Again, the change in weight for all associations is the sum of each association 
 
 First, initialize network weights to a small random value. 
 
-Repeat the steps below until the error is about 0​
+Repeat the steps below until the error is about 0
 
 - for each association, propagate the network forward and get the outputs
-  - calculate the $\delta$ term for each output layer node ($\delta_k = y_{kt} - y\prime_{kt}$)
-  - accumulate the gradient for each output weight ($\nabla_{w_{jkt}}E_t = \delta_{kt} y_{jt}$)
-  - calculate the $\delta$ term for each hidden layer node ($\delta_j = y_{jt}(1 - y_{jt})\sum^K_{k = 1}\delta_{kt} w_{jk}$)
-  - accumulate the gradient for each hidden layer weight ($\nabla_{w_{ijt}}E_t = \delta_{jt} y_{it}$)
+  - calculate the $\delta$ term for each output layer node ($\delta_k = y_k - y\prime_k$)
+  - accumulate the gradient for each output weight ($\nabla_{w_{jk}}E = \delta_k y_j$)
+  - calculate the $\delta$ term for each hidden layer node ($\delta_j = y_j(1 - y_{j})\sum^K_{k = 1}\delta_k w_{jk}$)
+  - accumulate the gradient for each hidden layer weight ($\nabla_{w_{ij}}E = \delta_j y_i$)
 - update all weights and reset accumulated gradients ($w = w - \epsilon \nabla E$)
 
 ### Visualizing backpropagation
