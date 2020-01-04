@@ -228,9 +228,24 @@ Note that the XOR operation could not be solved with the linear network used in 
 
 Feel free to try it out yourself and experiment with different activation functions, learning rates and network topologies. 
 
+### How to run
+
+#### Online on repl.it
+
+[![Run on Repl.it](https://repl.it/badge/github/gokadin/ai-backpropagation)](https://repl.it/github/gokadin/ai-backpropagation)
+
+#### Docker
+
+```bash
+docker build -t backpropagation .
+docker run --rm backpropagation
+```
+
+
+
 ## References
 
-- Artificial intelligence engines by James V Stone (2019)
-- Complete guide on deep learning: http://neuralnetworksanddeeplearning.com/chap2.html
-- Flow of backpropagation visualized: https://google-developers.appspot.com/machine-learning/crash-course/backprop-scroll/
-- Activation functions: https://medium.com/the-theory-of-everything/understanding-activation-functions-in-neural-networks-9491262884e0
+1. Artificial intelligence engines by James V Stone (2019)
+2. Complete guide on deep learning: http://neuralnetworksanddeeplearning.com/chap2.html
+3. Flow of backpropagation visualized: https://google-developers.appspot.com/machine-learning/crash-course/backprop-scroll/
+4. Activation functions: https://medium.com/the-theory-of-everything/understanding-activation-functions-in-neural-networks-9491262884e0
